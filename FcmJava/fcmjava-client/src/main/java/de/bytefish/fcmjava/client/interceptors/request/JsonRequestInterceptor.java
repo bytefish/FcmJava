@@ -15,6 +15,6 @@ public class JsonRequestInterceptor implements HttpRequestInterceptor {
 
     @Override
     public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
-        httpRequest.addHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        httpRequest.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     }
 }

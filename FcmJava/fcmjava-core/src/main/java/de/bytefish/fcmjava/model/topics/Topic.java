@@ -16,6 +16,6 @@ public class Topic {
     }
 
     public String getTopicPath() {
-        return String.format("%s/%s", "topics", name);
+        return String.format("/%s/%s", "topics", name);
     }
 }

@@ -3,6 +3,7 @@
 
 package de.bytefish.fcmjava.integration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
 import de.bytefish.fcmjava.constants.Constants;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
@@ -21,6 +22,26 @@ import java.time.Duration;
 
 public class FcmClientIntegrationTest {
 
+    private class PersonData {
+
+        private final String firstName;
+        private final String lastName;
+
+        public PersonData(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        @JsonProperty("firstName")
+        public String getFirstName() {
+            return firstName;
+        }
+
+        @JsonProperty("lastName")
+        public String getLastName() {
+            return lastName;
+        }
+    }
 
     private static class FileUtils {
 
@@ -72,7 +93,7 @@ public class FcmClientIntegrationTest {
                 .build();
 
         // Send a Message:
-        client.send(new TopicUnicastMessage(options, new Topic("cats"), 1));
+        client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
     }
 
 }
