@@ -7,12 +7,46 @@ import de.bytefish.fcmjava.client.FcmClient;
 import de.bytefish.fcmjava.constants.Constants;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
+import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.data.DataUnicastMessage;
+import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.Duration;
 
 public class FcmClientIntegrationTest {
 
-    private class FixedSettings implements IFcmClientSettings {
+
+    private static class FileUtils {
+
+        public static String readFile(String path, Charset encoding) {
+            try {
+                return internalReadFile(path, encoding);
+            } catch(IOException e) {
+                throw new RuntimeException("Error Reading File", e);
+            }
+        }
+
+        private static String internalReadFile(String path, Charset encoding)
+                throws IOException
+        {
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            return new String(encoded, encoding);
+        }
+    }
+
+    private class FileContentBasedSettings implements IFcmClientSettings {
+
+        private final String apiToken;
+
+        public FileContentBasedSettings(String apiTokenPath, Charset encoding) {
+            apiToken = FileUtils.readFile(apiTokenPath, encoding);
+        }
 
         @Override
         public String getFcmUrl() {
@@ -21,21 +55,24 @@ public class FcmClientIntegrationTest {
 
         @Override
         public String getApiKey() {
-            return "ahafsdjfsd8z371283";
+            return apiToken;
         }
     }
 
     @Test
+    @Ignore("This is an Integration Test using external files to contact the FCM Server")
     public void SendMessageTest() throws Exception {
-        FcmClient client = new FcmClient(new FixedSettings());
+
+        // Create the Client using file-based settings:
+        FcmClient client = new FcmClient(new FileContentBasedSettings("D:\\token.txt", Charset.forName("UTF-8")));
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(60)
+                .setTimeToLive(Duration.ofHours(1))
                 .build();
 
-        // send a Message:
-        client.send(new DataUnicastMessage(options,"sdads", 1));
+        // Send a Message:
+        client.send(new TopicUnicastMessage(options, new Topic("cats"), 1));
     }
 
 }
