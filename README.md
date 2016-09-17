@@ -2,7 +2,7 @@
 
 ## Description ##
 
-[FcmJava] is a library for working with the Firebase Cloud Messaging (FCM) API.
+[FcmJava] is a library for working with the [Firebase Cloud Messaging (FCM) API].
 
 ## Maven Dependencies ##
 
