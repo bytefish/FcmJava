@@ -9,15 +9,11 @@ import de.bytefish.fcmjava.constants.Constants;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
-import de.bytefish.fcmjava.requests.data.DataUnicastMessage;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 
 public class FcmClientIntegrationTest {
@@ -40,24 +36,6 @@ public class FcmClientIntegrationTest {
         @JsonProperty("lastName")
         public String getLastName() {
             return lastName;
-        }
-    }
-
-    private static class FileUtils {
-
-        public static String readFile(String path, Charset encoding) {
-            try {
-                return internalReadFile(path, encoding);
-            } catch(IOException e) {
-                throw new RuntimeException("Error Reading File", e);
-            }
-        }
-
-        private static String internalReadFile(String path, Charset encoding)
-                throws IOException
-        {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            return new String(encoded, encoding);
         }
     }
 
@@ -95,5 +73,4 @@ public class FcmClientIntegrationTest {
         // Send a Message:
         client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
     }
-
 }
