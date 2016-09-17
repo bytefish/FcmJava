@@ -8,6 +8,20 @@
 
 You can add the following dependencies to your pom.xml to include [FcmJava] in your project.
 
+```xml
+<dependency>
+  <groupId>de.bytefish.fcmjava</groupId>
+  <artifactId>fcmjava-core</artifactId>
+  <version>0.1</version>
+</dependency>
+
+<dependency>
+  <groupId>de.bytefish.fcmjava</groupId>
+  <artifactId>fcmjava-client</artifactId>
+  <version>0.1</version>
+</dependency>
+```
+
 ## Quickstart ##
 
 The Quickstart shows you how to work with [FcmJava].
