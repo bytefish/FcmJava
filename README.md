@@ -12,4 +12,5 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 
 The Quickstart shows you how to work with [FcmJava].
 
+[FcmJava]: https://github.com/bytefish/FcmJava
 [Firebase Cloud Messaging (FCM) API]: https://firebase.google.com
