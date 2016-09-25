@@ -4,6 +4,7 @@
 package de.bytefish.fcmjava.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bytefish.fcmjava.client.utils.HttpUtils;
 import de.bytefish.fcmjava.http.client.IFcmClient;
 import de.bytefish.fcmjava.client.interceptors.request.AuthenticationRequestInterceptor;
 import de.bytefish.fcmjava.client.interceptors.request.JsonRequestInterceptor;
@@ -33,8 +34,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 public class FcmClient implements IFcmClient {
-
-    private static final ObjectMapper mapper = new ObjectMapper();
 
     private final IFcmClientSettings settings;
     private final HttpClientBuilder httpClientBuilder;
@@ -103,72 +102,9 @@ public class FcmClient implements IFcmClient {
         post(message);
     }
 
-    private <TRequestMessage> void InternalPost(TRequestMessage requestMessage) throws Exception {
-
-        try (CloseableHttpClient client = httpClientBuilder.build()) {
-
-            // Initialize a new post Request:
-            HttpPost httpPost = new HttpPost(settings.getFcmUrl());
-
-            // Set the JSON String as data:
-            httpPost.setEntity(new StringEntity(getJsonString(requestMessage)));
-
-            // Execute the Request:
-            try(CloseableHttpResponse response = client.execute(httpPost)) {
-
-                // Get the HttpEntity:
-                HttpEntity entity = response.getEntity();
-
-                // Let's be a good citizen and consume the HttpEntity:
-                if(entity != null) {
-
-                    // Make Sure it is fully consumed:
-                    EntityUtils.consume(entity);
-                }
-            }
-        }
-    }
-
-    private <TRequestMessage, TResponseMessage> TResponseMessage InternalPost(TRequestMessage requestMessage, Class<TResponseMessage> responseType) throws Exception {
-
-        try(CloseableHttpClient client = httpClientBuilder.build()) {
-
-            // Initialize a new post Request:
-            HttpPost httpPost = new HttpPost(settings.getFcmUrl());
-
-            // Get the JSON representation of the given request message:
-            String requestJson = getJsonString(requestMessage);
-
-            // Set the JSON String as data:
-            httpPost.setEntity(new StringEntity(requestJson));
-
-            // Execute the Request:
-            try(CloseableHttpResponse response = client.execute(httpPost)) {
-
-                // Get the HttpEntity of the Response:
-                HttpEntity entity = response.getEntity();
-
-                // If we don't have a HttpEntity, we won't be able to convert it:
-                if(entity == null) {
-                    // Simply return null (no response) in this case:
-                    return null;
-                }
-
-                // Get the JSON Body:
-                String responseBody = EntityUtils.toString(entity);
-
-                // Make Sure it is fully consumed:
-                EntityUtils.consume(entity);
-
-                // And finally return the Response Message:
-                return getEntity(responseBody, responseType);
-            }
-        }
-    }
-
     protected <TRequestMessage, TResponseMessage> TResponseMessage post(TRequestMessage requestMessage, Class<TResponseMessage> responseType) {
         try {
-            return InternalPost(requestMessage, responseType);
+            return HttpUtils.post(httpClientBuilder, settings, requestMessage, responseType);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -176,20 +112,9 @@ public class FcmClient implements IFcmClient {
 
     protected <TRequestMessage> void post(TRequestMessage requestMessage) {
         try {
-            InternalPost(requestMessage);
+            HttpUtils.post(httpClientBuilder, settings, requestMessage);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private <TEntity> String getJsonString(TEntity source) throws Exception {
-        if(source == null) {
-            throw new IllegalArgumentException("source");
-        }
-        return mapper.writeValueAsString(source);
-    }
-
-    private <TEntity> TEntity getEntity(String source, Class<TEntity> valueType) throws Exception {
-        return mapper.readValue(source, valueType);
     }
 }
