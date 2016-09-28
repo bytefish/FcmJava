@@ -100,9 +100,9 @@ public class WeatherWarningIntegrationTest {
         private final Float temperature;
         private final Float windSpeed;
         private final Float stationPressure;
-        private final String skyCondition;
+        private final SkyConditionEnum skyCondition;
 
-        public LocalWeatherData(Station station, Date dateTime, Float temperature, Float windSpeed, Float stationPressure, String skyCondition) {
+        public LocalWeatherData(Station station, Date dateTime, Float temperature, Float windSpeed, Float stationPressure, SkyConditionEnum skyCondition) {
             this.station = station;
             this.dateTime = dateTime;
             this.temperature = temperature;
@@ -137,7 +137,7 @@ public class WeatherWarningIntegrationTest {
         }
 
         @JsonProperty("skyCondition")
-        public String getSkyCondition() {
+        public SkyConditionEnum getSkyCondition() {
             return skyCondition;
         }
     }
@@ -170,6 +170,28 @@ public class WeatherWarningIntegrationTest {
 
         @JsonProperty("highWindWarning")
         HighWindWarning
+    }
+
+    public enum SkyConditionEnum {
+
+        @JsonProperty("clear")
+        Clear,
+
+        @JsonProperty("mostlyClear")
+        MostlyClear,
+
+        @JsonProperty("partlyCloudy")
+        PartlyCloudy,
+
+        @JsonProperty("mostlyCloudy")
+        MostlyCloudy,
+
+        @JsonProperty("cloudy")
+        Cloudy,
+
+        @JsonProperty("fair")
+        Fair
+
     }
 
     private class WarningMessage {
@@ -237,18 +259,18 @@ public class WeatherWarningIntegrationTest {
         LocalWeatherData measurement0 = new LocalWeatherData(
                 station, // Station
                 DateUtils.from(LocalDateTime.of(2016, 2, 10, 2, 0), ZoneOffset.ofHours(10)), // Measurement Time
-                35.0f, // Temperature
-                5.0f, // Wind
+                41.0f, // Temperature
+                10.0f, // Wind
                 120.0f, // Station Pressure
-                "CLR"); // Sky Condition
+                SkyConditionEnum.Cloudy); // Sky Condition
 
         LocalWeatherData measurement1 = new LocalWeatherData(
                 station, // Station
                 DateUtils.from(LocalDateTime.of(2016, 2, 11, 2, 0), ZoneOffset.ofHours(10)), // Measurement Time
-                35.0f, // Temperature
-                5.0f, // Wind
+                44.0f, // Temperature
+                10.0f, // Wind
                 120.0f, // Station Pressure
-                "CLR"); // Sky Condition
+                SkyConditionEnum.Clear); // Sky Condition
 
 
         // The Warning:
