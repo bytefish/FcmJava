@@ -7,13 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.TopicList;
 import de.bytefish.fcmjava.requests.FcmUnicastMessage;
+import de.bytefish.fcmjava.requests.notification.NotificationPayload;
 
 public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
     private final String condition;
     private final Object data;
+    private final NotificationPayload notification;
 
-    public TopicMulticastMessage(FcmMessageOptions options, TopicList topicList, Object data) {
+    public TopicMulticastMessage(FcmMessageOptions options, TopicList topicList, Object data, NotificationPayload notification) {
 
         super(options, null);
 
@@ -23,10 +25,11 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
         this.condition = topicList.getTopicsCondition();
         this.data = data;
+        this.notification = notification;
     }
 
 
-    public TopicMulticastMessage(FcmMessageOptions options, String condition, Object data) {
+    public TopicMulticastMessage(FcmMessageOptions options, String condition, Object data, NotificationPayload notification) {
         super(options, null);
 
         if(condition == null) {
@@ -35,6 +38,7 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
         this.condition = condition;
         this.data = data;
+        this.notification = notification;
     }
 
     @Override
@@ -46,6 +50,11 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
     @JsonProperty("data")
     public Object getPayload() {
         return data;
+    }
+
+    @JsonProperty("notification")
+    public NotificationPayload getNotificationPayload() {
+        return this.notification;
     }
 
 }
