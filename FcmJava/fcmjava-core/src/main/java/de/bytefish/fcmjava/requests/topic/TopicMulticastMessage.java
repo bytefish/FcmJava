@@ -3,6 +3,7 @@
 
 package de.bytefish.fcmjava.requests.topic;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.TopicList;
@@ -53,6 +54,7 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
     }
 
     @JsonProperty("notification")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public NotificationPayload getNotificationPayload() {
         return this.notification;
     }
