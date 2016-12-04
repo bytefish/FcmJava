@@ -4,9 +4,12 @@
 package de.bytefish.fcmjava.responses;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.enums.ErrorCodeEnum;
 
+// Don't throw exceptions if Google adds additional properties to the response
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UnicastMessageResponse {
 
     private final String messageId;
