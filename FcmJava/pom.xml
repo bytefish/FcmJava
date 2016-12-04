@@ -6,7 +6,7 @@
 
     <groupId>de.bytefish.fcmjava</groupId>
     <artifactId>fcmjava-parent</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
 
     <name>fcmjava</name>
     <packaging>pom</packaging>
@@ -75,6 +75,12 @@
             <url>http://www.bytefish.de</url>
             <id>bytefish</id>
         </developer>
+		
+		<developer>
+            <name>PSanetra</name>
+            <url>https://github.com/PSanetra</url>
+        </developer>
+		
     </developers>
 
     <scm>

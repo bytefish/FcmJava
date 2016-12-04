@@ -12,19 +12,39 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-core</artifactId>
-  <version>0.3</version>
+  <version>0.4</version>
 </dependency>
 
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-client</artifactId>
-  <version>0.3</version>
+  <version>0.4</version>
 </dependency>
 ```
 
 ## Quickstart ##
 
 The Quickstart shows you how to work with [FcmJava].
+
+### API Key Settings ###
+
+The FCM API Key is read from an external ``.properties`` file to ensure the API Key secret does not reside in code or leaks into the public.
+
+The file contains the API Endpoint to send to and the API Key:
+
+```properties
+fcm.api.url=https://fcm.googleapis.com/fcm/send
+fcm.api.key=<YOUR_API_KEY_HERE>
+```
+
+You can use the ``PropertiesBasedSettings`` class to read the Properties:
+
+1. ``PropertiesBasedSettings.createFromDefault()``
+    * Uses the default file location of ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"`` to read the properties. This is the recommended way of reading your API Key.
+2. ``PropertiesBasedSettings.createFromFile(Path path, Charset charset)``
+    * Uses a custom file location to read the Client Settings from.
+3. ``PropertiesBasedSettings.createFromSystemProperties()``
+    * Uses the System Properties to initialize the Client Settings.
 
 ### FcmClient ###
 
@@ -70,31 +90,12 @@ public class FcmClientIntegrationTest {
         }
     }
 
-    private class FileContentBasedSettings implements IFcmClientSettings {
-
-        private final String apiToken;
-
-        public FileContentBasedSettings(String apiTokenPath, Charset encoding) {
-            apiToken = FileUtils.readFile(apiTokenPath, encoding);
-        }
-
-        @Override
-        public String getFcmUrl() {
-            return Constants.FCM_URL;
-        }
-
-        @Override
-        public String getApiKey() {
-            return apiToken;
-        }
-    }
-
     @Test
-    @Ignore("This is an Integration Test using external files to contact the FCM Server")
-    public void SendMessageTest() throws Exception {
+    @Ignore("This is an Integration Test using system properties to contact the FCM Server")
+    public void SendTopicMessageTest() throws Exception {
 
-        // Create the Client using file-based settings:
-        FcmClient client = new FcmClient(new FileContentBasedSettings("D:\\token.txt", Charset.forName("UTF-8")));
+        // Create the Client using system-properties-based settings:
+        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
