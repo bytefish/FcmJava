@@ -4,11 +4,8 @@
 package de.bytefish.fcmjava.responses;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// Don't throw exceptions if Google adds additional properties to the response
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateDeviceGroupMessageResponse {
 
     private final String notificationKey;

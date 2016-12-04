@@ -5,6 +5,8 @@ package de.bytefish.fcmjava.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
+import de.bytefish.fcmjava.integration.utils.DateUtils;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
@@ -217,7 +219,7 @@ public class WeatherWarningIntegrationTest {
     public void SendMessageTest() throws Exception {
 
         // Create the Client using file-based settings:
-        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
+        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()

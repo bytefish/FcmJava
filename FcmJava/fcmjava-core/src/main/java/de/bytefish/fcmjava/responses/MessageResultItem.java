@@ -13,6 +13,7 @@ public class MessageResultItem {
     private final String canonicalRegistrationId;
     private final ErrorCodeEnum errorCode;
 
+    @JsonCreator
     public MessageResultItem(
             @JsonProperty("message_id") String messageId,
             @JsonProperty("registration_id") String canonicalRegistrationId,

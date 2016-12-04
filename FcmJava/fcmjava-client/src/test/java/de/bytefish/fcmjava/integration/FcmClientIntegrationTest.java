@@ -5,6 +5,7 @@ package de.bytefish.fcmjava.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.client.settings.*;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.data.DataMulticastMessage;
@@ -45,7 +46,7 @@ public class FcmClientIntegrationTest {
     public void SendTopicMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
+        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
@@ -61,7 +62,7 @@ public class FcmClientIntegrationTest {
     public void SendDataMulticastMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
+        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
