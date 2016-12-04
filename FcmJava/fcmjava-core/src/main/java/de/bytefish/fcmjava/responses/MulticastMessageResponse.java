@@ -4,10 +4,13 @@
 package de.bytefish.fcmjava.responses;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+// Don't throw exceptions if Google adds additional properties to the response
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MulticastMessageResponse {
 
     private final long multicastId;
@@ -22,7 +25,7 @@ public class MulticastMessageResponse {
             @JsonProperty("multicast_id") long multicastId,
             @JsonProperty("success") int numberOfSuccess,
             @JsonProperty("failure") int numberOfFailure,
-            @JsonProperty("canoncial_ids") int numberOfCanonicalIds,
+            @JsonProperty("canonical_ids") int numberOfCanonicalIds,
             @JsonProperty("message_id") String messageId,
             @JsonProperty("results") List<MessageResultItem> results) {
         this.multicastId = multicastId;

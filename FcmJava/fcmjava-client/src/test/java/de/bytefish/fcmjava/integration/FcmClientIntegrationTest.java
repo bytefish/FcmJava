@@ -5,16 +5,17 @@ package de.bytefish.fcmjava.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.constants.Constants;
-import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
+import de.bytefish.fcmjava.requests.data.DataMulticastMessage;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
+import de.bytefish.fcmjava.responses.MulticastMessageResponse;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.nio.charset.Charset;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class FcmClientIntegrationTest {
 
@@ -39,31 +40,12 @@ public class FcmClientIntegrationTest {
         }
     }
 
-    private class FileContentBasedSettings implements IFcmClientSettings {
-
-        private final String apiToken;
-
-        public FileContentBasedSettings(String apiTokenPath, Charset encoding) {
-            apiToken = FileUtils.readFile(apiTokenPath, encoding);
-        }
-
-        @Override
-        public String getFcmUrl() {
-            return Constants.FCM_URL;
-        }
-
-        @Override
-        public String getApiKey() {
-            return apiToken;
-        }
-    }
-
     @Test
-    @Ignore("This is an Integration Test using external files to contact the FCM Server")
-    public void SendMessageTest() throws Exception {
+    @Ignore("This is an Integration Test using system properties to contact the FCM Server")
+    public void SendTopicMessageTest() throws Exception {
 
-        // Create the Client using file-based settings:
-        FcmClient client = new FcmClient(new FileContentBasedSettings("D:\\token.txt", Charset.forName("UTF-8")));
+        // Create the Client using system-properties-based settings:
+        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
@@ -72,5 +54,26 @@ public class FcmClientIntegrationTest {
 
         // Send a Message:
         client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+    }
+
+    @Test
+    @Ignore("This is an Integration Test using system properties to contact the FCM Server")
+    public void SendDataMulticastMessageTest() throws Exception {
+
+        // Create the Client using system-properties-based settings:
+        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
+
+        // Message Options:
+        FcmMessageOptions options = FcmMessageOptions.builder()
+                .setTimeToLive(Duration.ofHours(1))
+                .build();
+
+        ArrayList<String> registrationIds = new ArrayList<>();
+        registrationIds.add("invalid_key");
+
+        // Send a Message:
+        MulticastMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
+
+        Assert.assertNotNull(msgResponse);
     }
 }

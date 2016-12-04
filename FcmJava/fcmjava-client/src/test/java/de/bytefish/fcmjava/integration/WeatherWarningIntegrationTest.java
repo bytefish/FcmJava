@@ -5,15 +5,12 @@ package de.bytefish.fcmjava.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.constants.Constants;
-import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -215,31 +212,12 @@ public class WeatherWarningIntegrationTest {
         }
     }
 
-    private class FileContentBasedSettings implements IFcmClientSettings {
-
-        private final String apiToken;
-
-        public FileContentBasedSettings(String apiTokenPath, Charset encoding) {
-            apiToken = FileUtils.readFile(apiTokenPath, encoding);
-        }
-
-        @Override
-        public String getFcmUrl() {
-            return Constants.FCM_URL;
-        }
-
-        @Override
-        public String getApiKey() {
-            return apiToken;
-        }
-    }
-
     @Test
-    @Ignore("This is an Integration Test using external files to contact the FCM Server")
+    @Ignore("This is an Integration Test using system properties to contact the FCM Server")
     public void SendMessageTest() throws Exception {
 
         // Create the Client using file-based settings:
-        FcmClient client = new FcmClient(new FileContentBasedSettings("D:\\token.txt", Charset.forName("UTF-8")));
+        FcmClient client = new FcmClient(new SystemPropertiesBasedSettings());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
