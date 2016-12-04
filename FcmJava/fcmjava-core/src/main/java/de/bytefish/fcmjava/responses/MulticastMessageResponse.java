@@ -22,7 +22,7 @@ public class MulticastMessageResponse {
             @JsonProperty("multicast_id") long multicastId,
             @JsonProperty("success") int numberOfSuccess,
             @JsonProperty("failure") int numberOfFailure,
-            @JsonProperty("canoncial_ids") int numberOfCanonicalIds,
+            @JsonProperty("canonical_ids") int numberOfCanonicalIds,
             @JsonProperty("message_id") String messageId,
             @JsonProperty("results") List<MessageResultItem> results) {
         this.multicastId = multicastId;
