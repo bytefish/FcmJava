@@ -4,7 +4,9 @@
 package de.bytefish.fcmjava.client.utils;
 
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -93,6 +95,4 @@ public class HttpUtils {
             }
         }
     }
-
-
 }
