@@ -20,13 +20,11 @@ import java.util.Properties;
 public class PropertiesBasedSettings implements IFcmClientSettings {
 
     private final String fcmUrl;
-    private final String fcmRetryCount;
     private final String fcmApiKey;
 
     protected PropertiesBasedSettings(Properties properties) {
         fcmUrl = properties.getProperty("fcm.api.url", Constants.FCM_URL);
         fcmApiKey = properties.getProperty("fcm.api.key");
-        fcmRetryCount = properties.getProperty("fcm.api.retryCount", "5");
     }
 
     @Override
@@ -37,19 +35,6 @@ public class PropertiesBasedSettings implements IFcmClientSettings {
     @Override
     public String getApiKey() {
         return fcmApiKey;
-    }
-
-    @Override
-    public Integer getRetryCount() {
-        return tryParseRetryCount(5);
-    }
-
-    private Integer tryParseRetryCount(int defaultValue) {
-        try {
-            return Integer.parseInt(fcmRetryCount);
-        } catch(Exception e) {
-            return defaultValue;
-        }
     }
 
     /**

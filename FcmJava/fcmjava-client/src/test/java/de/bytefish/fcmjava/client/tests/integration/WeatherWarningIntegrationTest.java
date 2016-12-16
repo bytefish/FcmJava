@@ -1,12 +1,12 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.integration;
+package de.bytefish.fcmjava.client.tests.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
 import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
-import de.bytefish.fcmjava.integration.utils.DateUtils;
+import de.bytefish.fcmjava.client.tests.testutils.DateUtils;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;

@@ -10,6 +10,7 @@ import de.bytefish.fcmjava.client.interceptors.response.LoggingResponseIntercept
 import de.bytefish.fcmjava.client.interceptors.response.StatusResponseInterceptor;
 import de.bytefish.fcmjava.client.utils.JsonUtils;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -17,6 +18,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
+import java.nio.charset.StandardCharsets;
 
 public class HttpClient implements IHttpClient {
 
@@ -66,7 +69,7 @@ public class HttpClient implements IHttpClient {
             HttpPost httpPost = new HttpPost(settings.getFcmUrl());
 
             // Set the JSON String as data:
-            httpPost.setEntity(new StringEntity(JsonUtils.getAsJsonString(requestMessage)));
+            httpPost.setEntity(new StringEntity(JsonUtils.getAsJsonString(requestMessage), StandardCharsets.UTF_8));
 
             // Execute the Request:
             try(CloseableHttpResponse response = client.execute(httpPost)) {
@@ -95,7 +98,7 @@ public class HttpClient implements IHttpClient {
             String requestJson = JsonUtils.getAsJsonString(requestMessage);
 
             // Set the JSON String as data:
-            httpPost.setEntity(new StringEntity(requestJson));
+            httpPost.setEntity(new StringEntity(requestJson, StandardCharsets.UTF_8));
 
             // Execute the Request:
             try(CloseableHttpResponse response = client.execute(httpPost)) {

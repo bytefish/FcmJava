@@ -13,19 +13,18 @@ import de.bytefish.fcmjava.requests.notification.NotificationUnicastMessage;
 import de.bytefish.fcmjava.requests.topic.TopicMulticastMessage;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import de.bytefish.fcmjava.responses.CreateDeviceGroupMessageResponse;
-import de.bytefish.fcmjava.responses.MulticastMessageResponse;
+import de.bytefish.fcmjava.responses.FcmMessageResponse;
 import de.bytefish.fcmjava.responses.TopicMessageResponse;
-import de.bytefish.fcmjava.responses.UnicastMessageResponse;
 
 public interface IFcmClient {
 
-    MulticastMessageResponse send(DataMulticastMessage message);
+    FcmMessageResponse send(DataMulticastMessage message);
 
-    MulticastMessageResponse send(NotificationMulticastMessage notification);
+    FcmMessageResponse send(NotificationMulticastMessage notification);
 
-    UnicastMessageResponse send(DataUnicastMessage message);
+    FcmMessageResponse send(DataUnicastMessage message);
 
-    UnicastMessageResponse send(NotificationUnicastMessage notification);
+    FcmMessageResponse send(NotificationUnicastMessage notification);
 
     CreateDeviceGroupMessageResponse send(CreateDeviceGroupMessage message);
 

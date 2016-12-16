@@ -1,16 +1,16 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.integration;
+package de.bytefish.fcmjava.client.tests.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.client.settings.*;
+import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.data.DataMulticastMessage;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
-import de.bytefish.fcmjava.responses.MulticastMessageResponse;
+import de.bytefish.fcmjava.responses.FcmMessageResponse;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class FcmClientIntegrationTest {
         registrationIds.add("invalid_key");
 
         // Send a Message:
-        MulticastMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
+        FcmMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
 
         Assert.assertNotNull(msgResponse);
     }

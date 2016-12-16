@@ -1,7 +1,7 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.client.retry;
+package de.bytefish.fcmjava.client.retry.strategy;
 
 import de.bytefish.fcmjava.client.functional.Action0;
 import de.bytefish.fcmjava.client.functional.Func1;
@@ -12,13 +12,10 @@ import java.time.Duration;
 
 public class SimpleRetryStrategy implements IRetryStrategy {
 
-    private final IFcmClientSettings settings;
+    private final int maxRetries;
 
-    public SimpleRetryStrategy(IFcmClientSettings settings) {
-        if(settings == null) {
-            throw new IllegalArgumentException("settings");
-        }
-        this.settings = settings;
+    public SimpleRetryStrategy(int maxRetries) {
+        this.maxRetries = maxRetries;
     }
 
     @Override
@@ -32,9 +29,6 @@ public class SimpleRetryStrategy implements IRetryStrategy {
 
     @Override
     public <TResult> TResult getWithRetry(Func1<TResult> function) {
-
-        // Get the Maximum Retry Count from the Settings:
-        int maxRetries = settings.getRetryCount();
 
         // Holds the current Retry Count:
         int currentRetryCount = 0;

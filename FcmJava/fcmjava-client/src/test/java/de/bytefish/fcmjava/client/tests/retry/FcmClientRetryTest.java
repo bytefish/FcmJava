@@ -1,21 +1,21 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.integration.retry;
+package de.bytefish.fcmjava.client.tests.retry;
 
 import de.bytefish.fcmjava.client.FcmClient;
 import de.bytefish.fcmjava.client.http.IHttpClient;
+import de.bytefish.fcmjava.client.retry.RetryUtils;
 import de.bytefish.fcmjava.exceptions.FcmRetryAfterException;
 import de.bytefish.fcmjava.http.client.IFcmClient;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
-import de.bytefish.fcmjava.integration.utils.TestUtils;
+import de.bytefish.fcmjava.client.tests.testutils.TestUtils;
 import de.bytefish.fcmjava.model.builders.FcmMessageOptionsBuilder;
 import de.bytefish.fcmjava.requests.groups.CreateDeviceGroupMessage;
 import de.bytefish.fcmjava.responses.CreateDeviceGroupMessageResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -44,10 +44,6 @@ public class FcmClientRetryTest {
         // Fake Message to send:
         CreateDeviceGroupMessage createDeviceGroupMessage = new CreateDeviceGroupMessage(new FcmMessageOptionsBuilder().build(), new ArrayList<>(), "Unit Test");
 
-        // Set Mock Expectations:
-        when(settingsMock.getRetryCount())
-                .thenReturn(5);
-
         when(httpClientMock.post(createDeviceGroupMessage, CreateDeviceGroupMessageResponse.class))
                 .thenThrow(new FcmRetryAfterException(Duration.ZERO));
 
@@ -55,7 +51,7 @@ public class FcmClientRetryTest {
         IFcmClient client = new FcmClient(settingsMock, httpClientMock);
 
         // Invoke it and make sure it throws:
-        TestUtils.assertThrows(() -> client.send(createDeviceGroupMessage), FcmRetryAfterException.class);
+        TestUtils.assertThrows(() -> RetryUtils.getWithRetry(() -> client.send(createDeviceGroupMessage), 5), FcmRetryAfterException.class);
 
         // And finally verify it has been called 5 times as set in the Mock Expectations:
         verify(httpClientMock, times(5))
@@ -71,10 +67,6 @@ public class FcmClientRetryTest {
         // Fake Message to receive:
         CreateDeviceGroupMessageResponse createDeviceGroupMessageResponse = new CreateDeviceGroupMessageResponse("Unit Test");
 
-        // Set Mock Expectations:
-        when(settingsMock.getRetryCount())
-                .thenReturn(5);
-
         when(httpClientMock.post(createDeviceGroupMessage, CreateDeviceGroupMessageResponse.class))
                 .thenReturn(createDeviceGroupMessageResponse);
 
@@ -82,7 +74,7 @@ public class FcmClientRetryTest {
         IFcmClient client = new FcmClient(settingsMock, httpClientMock);
 
         // Invoke it and make sure it throws:
-        TestUtils.assertDoesNotThrow(() -> client.send(createDeviceGroupMessage));
+        TestUtils.assertDoesNotThrow(() -> RetryUtils.getWithRetry(() -> client.send(createDeviceGroupMessage), 5));
 
         // And finally verify it has been called 5 times as set in the Mock Expectations:
         verify(httpClientMock, times(1))

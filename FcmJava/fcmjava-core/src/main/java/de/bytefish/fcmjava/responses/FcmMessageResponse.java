@@ -8,23 +8,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class MulticastMessageResponse {
+public class FcmMessageResponse {
 
     private final long multicastId;
     private final int numberOfSuccess;
     private final int numberOfFailure;
     private final int numberOfCanonicalIds;
     private final String messageId;
-    private final List<MessageResultItem> results;
+    private final List<FcmMessageResultItem> results;
 
     @JsonCreator
-    public MulticastMessageResponse(
+    public FcmMessageResponse(
             @JsonProperty("multicast_id") long multicastId,
             @JsonProperty("success") int numberOfSuccess,
             @JsonProperty("failure") int numberOfFailure,
             @JsonProperty("canonical_ids") int numberOfCanonicalIds,
             @JsonProperty("message_id") String messageId,
-            @JsonProperty("results") List<MessageResultItem> results) {
+            @JsonProperty("results") List<FcmMessageResultItem> results) {
         this.multicastId = multicastId;
         this.numberOfSuccess = numberOfSuccess;
         this.numberOfFailure = numberOfFailure;
@@ -53,7 +53,7 @@ public class MulticastMessageResponse {
         return messageId;
     }
 
-    public List<MessageResultItem> getResults() {
+    public List<FcmMessageResultItem> getResults() {
         return results;
     }
 }

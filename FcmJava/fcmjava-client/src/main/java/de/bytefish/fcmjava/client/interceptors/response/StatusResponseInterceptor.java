@@ -3,13 +3,15 @@
 
 package de.bytefish.fcmjava.client.interceptors.response;
 
+import de.bytefish.fcmjava.client.utils.DateUtils;
 import de.bytefish.fcmjava.client.utils.OutParameter;
 import de.bytefish.fcmjava.exceptions.*;
 import org.apache.http.*;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
-import java.time.Duration;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class StatusResponseInterceptor implements HttpResponseInterceptor {
 
@@ -82,12 +84,73 @@ public class StatusResponseInterceptor implements HttpResponseInterceptor {
         // Try to get the Value:
         String retryDelayAsString = retryAfterHeader.getValue();
 
-        // Try to convert the Header Value to a Long:
-        Long retryDelayAsLong = Long.parseLong(retryDelayAsString);
+        // Try to parse as Number and Date:
+        return tryGetRetryDelay(retryDelayAsString, retryDelay);
+    }
 
-        // Get the Duration:
-        retryDelay.set(Duration.ofSeconds(retryDelayAsLong));
+    private boolean tryGetRetryDelay(String retryDelayAsString, OutParameter<Duration> result) {
+        if(tryGetFromLong(retryDelayAsString, result)) {
+            return true;
+        }
+        if(tryGetFromDate(retryDelayAsString, result)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean tryGetFromLong(String retryDelayAsString, OutParameter<Duration> result) {
+        OutParameter<Long> longResult = new OutParameter<>();
+
+        if(!tryConvertToLong(retryDelayAsString, longResult)) {
+            return false;
+        }
+
+        // If we can convert it to Long, it is a Second Duration:
+        Duration retryDelayAsDuration = Duration.ofSeconds(longResult.get());
+
+        // Set in the Out Parameter:
+        result.set(retryDelayAsDuration);
 
         return true;
+    }
+
+    private boolean tryConvertToLong(String longAsString, OutParameter<Long> result) {
+        try {
+            result.set(Long.parseLong(longAsString));
+
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    private boolean tryGetFromDate(String dateAsString, OutParameter<Duration> result) {
+        OutParameter<ZonedDateTime> resultDate = new OutParameter<>();
+        if(!tryToConvertToDate(dateAsString, resultDate)) {
+            return false;
+        }
+
+        // Get Now Date and Next Retry Date as String:
+        ZonedDateTime utcNowDateTime = DateUtils.getUtcNow();
+        ZonedDateTime nextRetryDateTime = resultDate.get().withZoneSameInstant(ZoneOffset.UTC);
+
+        // Calculate Duration between both:
+        Duration durationToNextRetryTime = Duration.between(utcNowDateTime, nextRetryDateTime);
+
+        // Set it as Result:
+        result.set(durationToNextRetryTime);
+
+        // And return success:
+        return true;
+    }
+
+    private boolean tryToConvertToDate(String dateAsString, OutParameter<ZonedDateTime> result) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+            result.set(ZonedDateTime.parse(dateAsString, formatter));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
