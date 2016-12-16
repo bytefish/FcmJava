@@ -117,6 +117,4 @@ public class FcmClient implements IFcmClient {
     protected <TRequestMessage> void post(TRequestMessage requestMessage) {
         retryStrategy.doWithRetry(() -> httpClient.post(requestMessage));
     }
-
-
 }
