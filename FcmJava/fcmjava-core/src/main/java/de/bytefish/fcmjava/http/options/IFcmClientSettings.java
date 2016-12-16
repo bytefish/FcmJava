@@ -9,4 +9,5 @@ public interface IFcmClientSettings {
 
     String getApiKey();
 
+    Integer getRetryCount();
 }

@@ -38,4 +38,7 @@ public class FcmRetryAfterException extends FcmException {
         this.retryDelay = retryDelay;
     }
 
+    public Duration getRetryDelay() {
+        return retryDelay;
+    }
 }

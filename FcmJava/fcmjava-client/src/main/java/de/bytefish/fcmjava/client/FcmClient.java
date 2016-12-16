@@ -3,14 +3,12 @@
 
 package de.bytefish.fcmjava.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bytefish.fcmjava.client.utils.HttpUtils;
+import de.bytefish.fcmjava.client.http.HttpClient;
+import de.bytefish.fcmjava.client.http.IHttpClient;
+import de.bytefish.fcmjava.client.retry.IRetryStrategy;
+import de.bytefish.fcmjava.client.retry.SimpleRetryStrategy;
+import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
 import de.bytefish.fcmjava.http.client.IFcmClient;
-import de.bytefish.fcmjava.client.interceptors.request.AuthenticationRequestInterceptor;
-import de.bytefish.fcmjava.client.interceptors.request.JsonRequestInterceptor;
-import de.bytefish.fcmjava.client.interceptors.request.LoggingRequestInterceptor;
-import de.bytefish.fcmjava.client.interceptors.response.LoggingResponseInterceptor;
-import de.bytefish.fcmjava.client.interceptors.response.StatusResponseInterceptor;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.requests.data.DataMulticastMessage;
 import de.bytefish.fcmjava.requests.data.DataUnicastMessage;
@@ -25,36 +23,46 @@ import de.bytefish.fcmjava.responses.CreateDeviceGroupMessageResponse;
 import de.bytefish.fcmjava.responses.MulticastMessageResponse;
 import de.bytefish.fcmjava.responses.TopicMessageResponse;
 import de.bytefish.fcmjava.responses.UnicastMessageResponse;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 
 public class FcmClient implements IFcmClient {
 
     private final IFcmClientSettings settings;
-    private final HttpClientBuilder httpClientBuilder;
+    private final IRetryStrategy retryStrategy;
+    private final IHttpClient httpClient;
+
+    public FcmClient() {
+        this(PropertiesBasedSettings.createFromDefault());
+    }
 
     public FcmClient(IFcmClientSettings settings) {
+        this(settings, new HttpClient(settings));
+    }
+
+    public FcmClient(IFcmClientSettings settings, IRetryStrategy retryStrategy) {
+        this(settings, new HttpClient(settings), retryStrategy);
+    }
+
+    public FcmClient(IFcmClientSettings settings, IHttpClient httpClient) {
+        this(settings, httpClient, new SimpleRetryStrategy(settings));
+    }
+
+    public FcmClient(IFcmClientSettings settings, IHttpClient httpClient, IRetryStrategy retryStrategy) {
 
         if(settings == null) {
             throw new IllegalArgumentException("settings");
         }
 
-        this.settings = settings;
+        if(httpClient == null) {
+            throw new IllegalArgumentException("httpClient");
+        }
 
-        // Construct the Builder for all Requests:
-        this.httpClientBuilder = HttpClientBuilder.create()
-                // Build Request Pipeline:
-                .addInterceptorFirst(new AuthenticationRequestInterceptor(settings.getApiKey()))
-                .addInterceptorLast(new JsonRequestInterceptor())
-                .addInterceptorLast(new LoggingRequestInterceptor())
-                // Build Response Pipeline:
-                .addInterceptorFirst(new LoggingResponseInterceptor())
-                .addInterceptorLast(new StatusResponseInterceptor());
+        if(retryStrategy == null) {
+            throw new IllegalArgumentException("retryStrategy");
+        }
+
+        this.settings = settings;
+        this.httpClient = httpClient;
+        this.retryStrategy = retryStrategy;
     }
 
     @Override
@@ -103,18 +111,12 @@ public class FcmClient implements IFcmClient {
     }
 
     protected <TRequestMessage, TResponseMessage> TResponseMessage post(TRequestMessage requestMessage, Class<TResponseMessage> responseType) {
-        try {
-            return HttpUtils.post(httpClientBuilder, settings, requestMessage, responseType);
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        return retryStrategy.getWithRetry(() -> httpClient.post(requestMessage, responseType));
     }
 
     protected <TRequestMessage> void post(TRequestMessage requestMessage) {
-        try {
-            HttpUtils.post(httpClientBuilder, settings, requestMessage);
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        retryStrategy.doWithRetry(() -> httpClient.post(requestMessage));
     }
+
+
 }
