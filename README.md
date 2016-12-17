@@ -95,7 +95,7 @@ public class FcmClientIntegrationTest {
     public void SendTopicMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
+        FcmClient client = new FcmClient();
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
