@@ -12,7 +12,7 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-core</artifactId>
-  <version>0.4</version>
+  <version>0.5</version>
 </dependency>
 
 <dependency>

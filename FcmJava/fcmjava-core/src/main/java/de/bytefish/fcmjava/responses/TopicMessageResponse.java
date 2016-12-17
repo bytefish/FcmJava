@@ -4,9 +4,11 @@
 package de.bytefish.fcmjava.responses;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.enums.ErrorCodeEnum;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TopicMessageResponse {
 
     private final String messageId;

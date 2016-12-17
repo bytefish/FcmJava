@@ -6,10 +6,26 @@ package de.bytefish.fcmjava.client.retry.strategy;
 import de.bytefish.fcmjava.client.functional.Action0;
 import de.bytefish.fcmjava.client.functional.Func1;
 
+/**
+ * A Retry Strategy used to retry a function without a return value (@see {@link Action0}) and
+ * functions with return values (@see {@link Func1}.
+ */
 public interface IRetryStrategy {
 
+    /**
+     * Retries a function without a return value.
+     *
+     * @param action Action to invoke.
+     */
     void doWithRetry(Action0 action);
 
+    /**
+     * Retries a function with a return values.
+     *
+     * @param function Function to invoke.
+     * @param <TResult> Result of the invocation.
+     * @return Result of the invocation.
+     */
     <TResult> TResult getWithRetry(Func1<TResult> function);
 
 }

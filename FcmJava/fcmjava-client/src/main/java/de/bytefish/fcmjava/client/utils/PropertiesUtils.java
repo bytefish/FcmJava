@@ -12,6 +12,13 @@ import java.util.Properties;
 
 public class PropertiesUtils {
 
+    /**
+     * Loads a Poperties file from a given Path using a given Charset.
+     *
+     * @param path The File to read the Properties from.
+     * @param charset The Charset used for reading the Properties file.
+     * @return The Properties of the given file.
+     */
     public static Properties loadProperties(Path path, Charset charset) {
         try {
             // Get a Reader for the given File:
@@ -23,6 +30,12 @@ public class PropertiesUtils {
         }
     }
 
+    /**
+     *  Loads Properties from a given Reader.
+     *
+     * @param reader The reader used for parsing the Properties.
+     * @return The Properties of the given Reader.
+     */
     public static Properties loadProperties(Reader reader) {
         Properties properties = new Properties();
         try {

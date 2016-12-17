@@ -10,6 +10,14 @@ import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 
 import java.time.Duration;
 
+/**
+ * The SimpleRetryStrategy retries all methods, that throw a @see {@link FcmRetryAfterException} for a
+ * maximum number of retries.
+ *
+ * The @see {@link FcmRetryAfterException} includes a Retry Delay, which indicates when the method
+ * should be retried. This Strategy waits for the amount of time given in the @see {@link FcmRetryAfterException}
+ * and waits for a fixed amount of time.
+ */
 public class SimpleRetryStrategy implements IRetryStrategy {
 
     private final int maxRetries;

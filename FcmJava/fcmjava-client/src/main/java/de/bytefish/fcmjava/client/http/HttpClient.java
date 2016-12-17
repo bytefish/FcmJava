@@ -10,7 +10,6 @@ import de.bytefish.fcmjava.client.interceptors.response.LoggingResponseIntercept
 import de.bytefish.fcmjava.client.interceptors.response.StatusResponseInterceptor;
 import de.bytefish.fcmjava.client.utils.JsonUtils;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
-import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
