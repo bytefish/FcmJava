@@ -53,7 +53,6 @@ public class RetryUtils {
      *
      * @param action Action to retry.
      * @param retryStrategy RetryStrategy to apply.
-     * @return Result of the Method invocation.
      */
     public static void doWithRetry(Action0 action, IRetryStrategy retryStrategy) {
         retryStrategy.doWithRetry(action);
