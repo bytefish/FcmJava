@@ -28,7 +28,9 @@ The Quickstart shows you how to work with [FcmJava].
 
 ### API Key Settings ###
 
-The FCM API Key is read from an external ``.properties`` file to ensure the API Key secret does not reside in code or leaks into the public.
+The FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` to ensure the API Key secret does not reside in code or leaks into the public.
+
+The default location of the ``fcmjava.properties`` is ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"``.
 
 The file contains the API Endpoint to send to and the API Key:
 
@@ -37,7 +39,7 @@ fcm.api.url=https://fcm.googleapis.com/fcm/send
 fcm.api.key=<YOUR_API_KEY_HERE>
 ```
 
-You can use the ``PropertiesBasedSettings`` class to read the Properties:
+You can use the ``PropertiesBasedSettings`` class to read the Properties, if it differs from the default path:
 
 1. ``PropertiesBasedSettings.createFromDefault()``
     * Uses the default file location of ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"`` to read the properties. This is the recommended way of reading your API Key.
