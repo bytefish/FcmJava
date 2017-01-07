@@ -26,28 +26,6 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 
 The Quickstart shows you how to work with [FcmJava].
 
-### API Key Settings ###
-
-The FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` to ensure the API Key secret does not reside in code or leaks into the public.
-
-The default location of the ``fcmjava.properties`` is ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"``.
-
-The file contains the API Endpoint to send to and the API Key:
-
-```properties
-fcm.api.url=https://fcm.googleapis.com/fcm/send
-fcm.api.key=<YOUR_API_KEY_HERE>
-```
-
-You can use the ``PropertiesBasedSettings`` class to read the Properties, if it differs from the default path:
-
-1. ``PropertiesBasedSettings.createFromDefault()``
-    * Uses the default file location of ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"`` to read the properties. This is the recommended way of reading your API Key.
-2. ``PropertiesBasedSettings.createFromFile(Path path, Charset charset)``
-    * Uses a custom file location to read the Client Settings from.
-3. ``PropertiesBasedSettings.createFromSystemProperties()``
-    * Uses the System Properties to initialize the Client Settings.
-
 ### FcmClient ###
 
 ```java
@@ -109,6 +87,28 @@ public class FcmClientIntegrationTest {
     }
 }
 ```
+
+### API Key Settings ###
+
+The FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` to ensure the API Key secret does not reside in code or leaks into the public.
+
+The default location of the ``fcmjava.properties`` is ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"``.
+
+The file contains the API Endpoint to send to and the API Key:
+
+```properties
+fcm.api.url=https://fcm.googleapis.com/fcm/send
+fcm.api.key=<YOUR_API_KEY_HERE>
+```
+
+You can use the ``PropertiesBasedSettings`` class to read the Properties, if it differs from the default path:
+
+1. ``PropertiesBasedSettings.createFromDefault()``
+    * Uses the default file location of ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"`` to read the properties. This is the recommended way of reading your API Key.
+2. ``PropertiesBasedSettings.createFromFile(Path path, Charset charset)``
+    * Uses a custom file location to read the Client Settings from.
+3. ``PropertiesBasedSettings.createFromSystemProperties()``
+    * Uses the System Properties to initialize the Client Settings.
 
 ### Android Client ###
 
