@@ -41,5 +41,8 @@ public enum ErrorCodeEnum
     DeviceMessageRateExceeded,
 
     @JsonProperty("TopicsMessageRateExceeded")
-    TopicsMessageRateExceeded
+    TopicsMessageRateExceeded,
+
+    @JsonProperty("InvalidParameters")
+    InvalidParameters
 }
