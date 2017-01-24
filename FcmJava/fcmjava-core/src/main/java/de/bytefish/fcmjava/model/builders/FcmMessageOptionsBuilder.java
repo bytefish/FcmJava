@@ -5,7 +5,6 @@ package de.bytefish.fcmjava.model.builders;
 
 import de.bytefish.fcmjava.model.enums.PriorityEnum;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
-import de.bytefish.fcmjava.utils.StringUtils;
 
 import java.time.Duration;
 

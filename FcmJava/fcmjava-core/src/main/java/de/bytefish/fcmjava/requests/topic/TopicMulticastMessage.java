@@ -31,6 +31,7 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
 
     public TopicMulticastMessage(FcmMessageOptions options, String condition, Object data, NotificationPayload notification) {
+
         super(options, null);
 
         if(condition == null) {

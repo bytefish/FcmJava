@@ -4,13 +4,13 @@ import de.bytefish.fcmjava.requests.notification.NotificationPayload;
 import java.util.List;
 
 /**
- * Builder helper class to make easier to create {@link NotificationPayload} instances.
- * <p>
+ * Builder for creating {@link NotificationPayload} instances.
+ *
  * All fields are optional, and some of them are common for both Android and iOS and some
  * of them are specific to Android ({@link #icon}, {@link #tag}, {@link #color})
  * or specific to iOS ({@link #badge}).
  *
- * @author Francisco Aranda {@code <fran.culebras@gmail.com>}
+ * @author Francisco Aranda (fran.culebras@gmail.com>)
  */
 public class NotificationPayloadBuilder {
 

@@ -5,6 +5,7 @@ package de.bytefish.fcmjava.requests.notification;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.bytefish.fcmjava.requests.builders.NotificationPayloadBuilder;
 
 import java.util.List;
 
@@ -96,5 +97,9 @@ public class NotificationPayload {
     @JsonProperty("title_loc_args")
     public List<String> getTitleLocKeyArgs() {
         return titleLocKeyArgs;
+    }
+
+    public static NotificationPayloadBuilder builder() {
+        return new NotificationPayloadBuilder();
     }
 }

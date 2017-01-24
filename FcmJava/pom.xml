@@ -69,16 +69,23 @@
     </licenses>
 
     <developers>
+
         <developer>
-            <email>bytefish@gmx.de</email>
+            <id>bytefish</id>
             <name>Philipp Wagner</name>
             <url>http://www.bytefish.de</url>
-            <id>bytefish</id>
+            <email>bytefish@gmx.de</email>
         </developer>
 
         <developer>
             <name>PSanetra</name>
             <url>https://github.com/PSanetra</url>
+        </developer>
+
+        <developer>
+            <name>Francisco Aranda</name>
+            <url>https://github.com/culebras</url>
+            <email>fran.culebras@gmail.com</email>
         </developer>
 
     </developers>
