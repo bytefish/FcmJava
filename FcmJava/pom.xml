@@ -6,7 +6,7 @@
 
     <groupId>de.bytefish.fcmjava</groupId>
     <artifactId>fcmjava-parent</artifactId>
-    <version>0.7</version>
+    <version>0.8</version>
 
     <name>fcmjava</name>
     <packaging>pom</packaging>

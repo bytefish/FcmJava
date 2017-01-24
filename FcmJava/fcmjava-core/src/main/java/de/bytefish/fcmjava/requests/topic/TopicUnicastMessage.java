@@ -19,6 +19,10 @@ public class TopicUnicastMessage extends FcmUnicastMessage<Object> {
         this(options, to, data, null);
     }
 
+    public TopicUnicastMessage(FcmMessageOptions options, Topic to, NotificationPayload notification) {
+        this(options, to, null, notification);
+    }
+
     public TopicUnicastMessage(FcmMessageOptions options, Topic to, Object data, NotificationPayload notification) {
         super(options, to.getTopicPath());
 
@@ -28,6 +32,7 @@ public class TopicUnicastMessage extends FcmUnicastMessage<Object> {
 
     @Override
     @JsonProperty("data")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public Object getPayload() {
         return data;
     }

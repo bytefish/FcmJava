@@ -10,7 +10,7 @@ import java.util.List;
  * of them are specific to Android ({@link #icon}, {@link #tag}, {@link #color})
  * or specific to iOS ({@link #badge}).
  *
- * @author Francisco Aranda (fran.culebras@gmail.com>)
+ * @author Francisco Aranda (fran.culebras@gmail.com)
  */
 public class NotificationPayloadBuilder {
 
