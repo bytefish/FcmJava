@@ -15,7 +15,7 @@ STDOUT=stdout.log
 STDERR=stderr.log
 
 # POM File to use for building the project:
-POM_FILE=..\pom.xml
+POM_FILE=../pom.xml
 
 # Prompt for Sonatype:
 read -p "Sonatype User: " SONATYPE_USER
