@@ -10,7 +10,6 @@ import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
@@ -22,7 +21,7 @@ public class PropertiesBasedSettings implements IFcmClientSettings {
     private final String fcmUrl;
     private final String fcmApiKey;
 
-    protected PropertiesBasedSettings(Properties properties) {
+    private PropertiesBasedSettings(Properties properties) {
         fcmUrl = properties.getProperty("fcm.api.url", Constants.FCM_URL);
         fcmApiKey = properties.getProperty("fcm.api.key");
     }
@@ -76,4 +75,15 @@ public class PropertiesBasedSettings implements IFcmClientSettings {
 
         return new PropertiesBasedSettings(properties);
     }
+
+    /**
+     * Reads the properties from a Properties object.
+     *
+     * @param properties Properties instance
+     * @return Initialized Client Settings
+     */
+    public static PropertiesBasedSettings createFromProperties(Properties properties) {
+        return new PropertiesBasedSettings(properties);
+    }
+
 }
