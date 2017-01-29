@@ -16,7 +16,6 @@ public class FcmMessageResponse {
     private final int numberOfSuccess;
     private final int numberOfFailure;
     private final int numberOfCanonicalIds;
-    private final String messageId;
     private final List<FcmMessageResultItem> results;
 
     @JsonCreator
@@ -25,13 +24,11 @@ public class FcmMessageResponse {
             @JsonProperty("success") int numberOfSuccess,
             @JsonProperty("failure") int numberOfFailure,
             @JsonProperty("canonical_ids") int numberOfCanonicalIds,
-            @JsonProperty("message_id") String messageId,
             @JsonProperty("results") List<FcmMessageResultItem> results) {
         this.multicastId = multicastId;
         this.numberOfSuccess = numberOfSuccess;
         this.numberOfFailure = numberOfFailure;
         this.numberOfCanonicalIds = numberOfCanonicalIds;
-        this.messageId = messageId;
         this.results = results;
     }
 
@@ -51,11 +48,18 @@ public class FcmMessageResponse {
         return numberOfCanonicalIds;
     }
 
-    public String getMessageId() {
-        return messageId;
-    }
-
     public List<FcmMessageResultItem> getResults() {
         return results;
+    }
+
+    @Override
+    public String toString() {
+        return "FcmMessageResponse{" +
+                "multicastId=" + multicastId +
+                ", numberOfSuccess=" + numberOfSuccess +
+                ", numberOfFailure=" + numberOfFailure +
+                ", numberOfCanonicalIds=" + numberOfCanonicalIds +
+                ", results=" + results +
+                '}';
     }
 }

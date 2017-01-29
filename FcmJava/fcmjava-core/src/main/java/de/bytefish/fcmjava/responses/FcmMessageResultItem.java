@@ -36,4 +36,13 @@ public class FcmMessageResultItem {
     public ErrorCodeEnum getErrorCode() {
         return errorCode;
     }
+
+    @Override
+    public String toString() {
+        return "FcmMessageResultItem{" +
+                "messageId='" + messageId + '\'' +
+                ", canonicalRegistrationId='" + canonicalRegistrationId + '\'' +
+                ", errorCode=" + errorCode +
+                '}';
+    }
 }
