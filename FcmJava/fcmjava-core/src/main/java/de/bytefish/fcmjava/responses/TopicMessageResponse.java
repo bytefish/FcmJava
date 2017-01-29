@@ -11,22 +11,30 @@ import de.bytefish.fcmjava.model.enums.ErrorCodeEnum;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TopicMessageResponse {
 
-    private final String messageId;
+    private final long messageId;
     private final ErrorCodeEnum errorCode;
 
     @JsonCreator
     public TopicMessageResponse(
-            @JsonProperty("message_id") String messageId,
+            @JsonProperty("message_id") long messageId,
             @JsonProperty("error") ErrorCodeEnum errorCode) {
         this.messageId = messageId;
         this.errorCode = errorCode;
     }
 
-    public String getMessageId() {
+    public long getMessageId() {
         return messageId;
     }
 
     public ErrorCodeEnum getErrorCode() {
         return errorCode;
+    }
+
+    @Override
+    public String toString() {
+        return "TopicMessageResponse{" +
+                "messageId=" + messageId +
+                ", errorCode=" + errorCode +
+                '}';
     }
 }
