@@ -90,6 +90,10 @@ public class FcmClientIntegrationTest {
 
 ### FcmClientSettings and API Key ###
 
+The ``FcmClient`` can be instantiated with ``IFcmClientSettings`` to supply the API Key. By default the ``FcmClient`` uses the 
+``PropertiesBasedSettings``, which locate the settings in a default location. If you need to supply the API Key in a different 
+way, you can simply instantiate the ``FcmClient`` with a custom ``IFcmClientSettings`` implementation.
+
 #### Using the PropertiesBasedSettings ####
 
 By default the FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` to ensure the API Key 
