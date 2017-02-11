@@ -88,11 +88,13 @@ public class FcmClientIntegrationTest {
 }
 ```
 
-### API Key ###
+### FcmClientSettings and API Key ###
 
-By default the FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` 
-to ensure the API Key secret does not reside in code or leaks into the public. The default location of 
-the ``fcmjava.properties`` is ``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"``.
+#### Using the PropertiesBasedSettings ####
+
+By default the FCM API Key is read from an external ``.properties`` file called ``fcmjava.properties`` to ensure the API Key 
+secret does not reside in code or leaks into the public. The default location of the ``fcmjava.properties`` is 
+``System.getProperty("user.home") + "/.fcmjava/fcmjava.properties"``.
 
 The file has to contain the FCM API Endpoint and the API Key:
 
@@ -111,8 +113,142 @@ You can use the ``PropertiesBasedSettings`` class to read the Properties and pas
     * Uses a custom file location to read the settings from.
 3. ``PropertiesBasedSettings.createFromSystemProperties()``
     * Uses the System Properties to initialize the settings.
+4. ``PropertiesBasedSettings.createFromProperties(Properties properties)``
+    * Uses the supplied Properties to build the FcmSettings.
 
-### Android Client ###
+#### Implementing the IFcmClientSettings interface ####
+
+It's not neccessary to use the ``PropertiesBasedSettings`` for supplying an API Key to the ``FcmClient``. You can easily implement the ``IFcmClientSettings`` interface 
+and pass it into the ``FcmClient``.
+
+The following test shows a simple ``IFcmClientSettings`` implementation, that will be instantiated with the given API Key. Again I strongly suggest to not hardcode the 
+Firebase Cloud Messaging API Key in code. This makes it possible to accidentally leak your credentials into public.
+
+```java
+// Copyright (c) Philipp Wagner. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+package de.bytefish.fcmjava.client.tests.settings;
+
+import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.constants.Constants;
+import de.bytefish.fcmjava.http.client.IFcmClient;
+import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import org.junit.Test;
+
+class FixedFcmClientSettings implements IFcmClientSettings {
+
+    private final String apiKey;
+
+    public FixedFcmClientSettings(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    @Override
+    public String getFcmUrl() {
+        return Constants.FCM_URL;
+    }
+
+    @Override
+    public String getApiKey() {
+        return apiKey;
+    }
+}
+
+public class FcmClientSettingsTest {
+
+    @Test
+    public void testFixedClientSettings() {
+
+        // Construct the FCM Client Settings with your API Key:
+        IFcmClientSettings clientSettings = new FixedFcmClientSettings("your_api_key_here");
+
+        // Instantiate the FcmClient with the API Key:
+        IFcmClient client = new FcmClient(clientSettings);
+    }
+
+}
+```
+    
+### Configuring a Proxy ###
+
+[Apache HttpClient]: http://hc.apache.org/httpcomponents-client-ga/
+[HttpClientBuilder]: http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html
+
+[FcmJava] uses [Apache HttpClient] for making requests to the Firebase Cloud Messaging server.
+
+In order to configure a proxy for the HTTP requests, you can configure the [HttpClientBuilder] used in [FcmJava]. This is done by 
+instantiating the ``HttpClient`` with your settings and then calling the ``configure`` method on it.
+
+The following test shows how to build the ``FcmClient`` with a custom ``HttpClient``, which configures a Proxy for the [HttpClientBuilder].
+
+```java
+// Copyright (c) Philipp Wagner. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+package de.bytefish.fcmjava.client.tests;
+
+import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.client.http.HttpClient;
+import de.bytefish.fcmjava.http.client.IFcmClient;
+import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.junit.Test;
+
+class MockFcmClientSettings implements IFcmClientSettings {
+
+    @Override
+    public String getFcmUrl() {
+        return "fcm_url";
+    }
+
+    @Override
+    public String getApiKey() {
+        return "your_api_key";
+    }
+}
+
+public class HttpBuilderConfigurationTest {
+
+
+    @Test
+    public void testFcmClientWithProxySettings() {
+
+        // Create Settings:
+        IFcmClientSettings settings = new MockFcmClientSettings();
+
+        // Create the HttpClient:
+        HttpClient httpClient = new HttpClient(settings);
+
+        // And configure the HttpClient:
+        httpClient.configure((httpClientBuilder -> {
+
+            // Define the Credentials to be used:
+            BasicCredentialsProvider basicCredentialsProvider = new BasicCredentialsProvider();
+
+            // Set the Credentials (any auth scope used):
+            basicCredentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("your_username", "your_password"));
+
+            httpClientBuilder
+                    // Set the Proxy Address:
+                    .setProxy(new HttpHost("your_hostname", 1234))
+                    // Set the Authentication Strategy:
+                    .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy())
+                    // Set the Credentials Provider we built above:
+                    .setDefaultCredentialsProvider(basicCredentialsProvider);
+        }));
+
+        // Finally build the FcmClient:
+        IFcmClient client = new FcmClient(settings, httpClient);
+    }
+}
+```
+    
+## Android Client ##
 
 I have decided to clone the messaging quickstart sample of Google, which is available at:
 
