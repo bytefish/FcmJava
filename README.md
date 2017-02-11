@@ -218,7 +218,6 @@ class MockFcmClientSettings implements IFcmClientSettings {
 
 public class HttpBuilderConfigurationTest {
 
-
     @Test
     public void testFcmClientWithProxySettings() {
 
@@ -236,7 +235,8 @@ public class HttpBuilderConfigurationTest {
 
             // Set the Credentials (any auth scope used):
             basicCredentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("your_username", "your_password"));
-
+            
+            // Now configure the HttpClientBuilder:
             httpClientBuilder
                     // Set the Proxy Address:
                     .setProxy(new HttpHost("your_hostname", 1234))
