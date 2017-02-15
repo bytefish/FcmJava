@@ -3,12 +3,9 @@
 
 package de.bytefish.fcmjava.client.http;
 
-import de.bytefish.fcmjava.client.functional.Action0;
 import de.bytefish.fcmjava.client.functional.Action1;
 import de.bytefish.fcmjava.client.interceptors.request.AuthenticationRequestInterceptor;
 import de.bytefish.fcmjava.client.interceptors.request.JsonRequestInterceptor;
-import de.bytefish.fcmjava.client.interceptors.request.LoggingRequestInterceptor;
-import de.bytefish.fcmjava.client.interceptors.response.LoggingResponseInterceptor;
 import de.bytefish.fcmjava.client.interceptors.response.StatusResponseInterceptor;
 import de.bytefish.fcmjava.client.utils.JsonUtils;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
@@ -40,9 +37,7 @@ public class HttpClient implements IHttpClient {
                 // Build Request Pipeline:
                 .addInterceptorFirst(new AuthenticationRequestInterceptor(settings.getApiKey()))
                 .addInterceptorLast(new JsonRequestInterceptor())
-                .addInterceptorLast(new LoggingRequestInterceptor())
                 // Build Response Pipeline:
-                .addInterceptorFirst(new LoggingResponseInterceptor())
                 .addInterceptorLast(new StatusResponseInterceptor());
     }
 
