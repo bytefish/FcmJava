@@ -251,7 +251,7 @@ public class HttpBuilderConfigurationTest {
     }
 }
 ```
-    
+
 ## Android Client ##
 
 I have decided to clone the messaging quickstart sample of Google, which is available at:
@@ -266,6 +266,10 @@ The Android app will now receive a message with the sent data included:
 09-17 21:10:45.250 10882-11300/com.google.firebase.quickstart.fcm D/MyFirebaseMsgService: From: /topics/news
 09-17 21:10:45.251 10882-11300/com.google.firebase.quickstart.fcm D/MyFirebaseMsgService: Message data payload: {lastName=Wagner, firstName=Philipp}
 ```
+
+## Additional Resources ##
+
+* [Send messages from Spring Boot to Ionic 2 over FCM](https://golb.hplar.ch/p/Send-messages-from-Spring-Boot-to-Ionic-2-over-FCM)
 
 [FcmJava]: https://github.com/bytefish/FcmJava
 [Firebase Cloud Messaging (FCM) API]: https://firebase.google.com
