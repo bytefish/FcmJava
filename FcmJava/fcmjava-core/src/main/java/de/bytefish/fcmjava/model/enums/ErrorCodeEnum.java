@@ -7,23 +7,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum ErrorCodeEnum
 {
+    @JsonProperty("MissingRegistration")
+    MissingRegistration,
+
     @JsonProperty("InvalidRegistration")
     InvalidRegistration,
 
     @JsonProperty("NotRegistered")
     NotRegistered,
 
-    @JsonProperty("MessageTooBig")
-    MessageTooBig,
-
-    @JsonProperty("MissingRegistration")
-    MissingRegistration,
-
-    @JsonProperty("Unavailable")
-    Unavailable,
+    @JsonProperty("InvalidPackageName")
+    InvalidPackageName,
 
     @JsonProperty("MismatchSenderId")
     MismatchSenderId,
+
+    @JsonProperty("InvalidParameters")
+    InvalidParameters,
+
+    @JsonProperty("MessageTooBig")
+    MessageTooBig,
 
     @JsonProperty("InvalidDataKey")
     InvalidDataKey,
@@ -31,11 +34,11 @@ public enum ErrorCodeEnum
     @JsonProperty("InvalidTtl")
     InvalidTtl,
 
+    @JsonProperty("Unavailable")
+    Unavailable,
+
     @JsonProperty("InternalServerError")
     InternalServerError,
-
-    @JsonProperty("InvalidPackageName")
-    InvalidPackageName,
 
     @JsonProperty("DeviceMessageRateExceeded")
     DeviceMessageRateExceeded,
@@ -43,6 +46,6 @@ public enum ErrorCodeEnum
     @JsonProperty("TopicsMessageRateExceeded")
     TopicsMessageRateExceeded,
 
-    @JsonProperty("InvalidParameters")
-    InvalidParameters
+    @JsonProperty("InvalidApnsCredential")
+    InvalidApnsCredential
 }
