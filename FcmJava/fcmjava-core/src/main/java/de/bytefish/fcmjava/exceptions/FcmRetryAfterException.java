@@ -4,8 +4,11 @@
 package de.bytefish.fcmjava.exceptions;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
 
+/**
+ * This Exception is thrown, when a message failed, but we are allowed to Retry it. You have to respect the Retry Delay
+ * associated with this Exception, before you retry the Operation. You can use the RetryUtils to retry the operations.
+ */
 public class FcmRetryAfterException extends FcmException {
 
     private final Duration retryDelay;

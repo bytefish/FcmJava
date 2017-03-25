@@ -19,6 +19,12 @@ import org.apache.http.util.EntityUtils;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * This HttpClient is based on the Apache HttpClient.
+ *
+ * If you need to configure the Apache HttpClient (proxy settings, timeouts, ...) you can call the configure(...)
+ * method to modify the HttpClientBuilder used for creating Apache HttpClient instances.
+ */
 public class HttpClient implements IHttpClient {
 
     private final IFcmClientSettings settings;

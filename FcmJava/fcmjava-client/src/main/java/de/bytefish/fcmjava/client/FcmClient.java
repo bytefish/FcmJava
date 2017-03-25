@@ -5,8 +5,6 @@ package de.bytefish.fcmjava.client;
 
 import de.bytefish.fcmjava.client.http.HttpClient;
 import de.bytefish.fcmjava.client.http.IHttpClient;
-import de.bytefish.fcmjava.client.retry.strategy.IRetryStrategy;
-import de.bytefish.fcmjava.client.retry.strategy.SimpleRetryStrategy;
 import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
 import de.bytefish.fcmjava.http.client.IFcmClient;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;

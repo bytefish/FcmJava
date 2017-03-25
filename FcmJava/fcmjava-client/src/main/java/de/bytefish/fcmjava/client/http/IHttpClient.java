@@ -3,6 +3,9 @@
 
 package de.bytefish.fcmjava.client.http;
 
+/**
+ * An HttpClient is used to send Requests to FCM.
+ */
 public interface IHttpClient {
 
     <TRequestMessage> void post(TRequestMessage requestMessage);

@@ -11,6 +11,9 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 
+/**
+ * This RequestInterceptor sets the Request Content-Type to application/json.
+ */
 public class JsonRequestInterceptor implements HttpRequestInterceptor {
 
     @Override

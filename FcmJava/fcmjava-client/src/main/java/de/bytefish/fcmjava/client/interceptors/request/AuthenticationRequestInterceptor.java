@@ -10,10 +10,18 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 
+/**
+ * This RequestInterceptor adds the API Key Request Header.
+ */
 public class AuthenticationRequestInterceptor implements HttpRequestInterceptor {
 
     private final String apiKey;
 
+    /**
+     * Instantiates a new RequestInterceptor with the given API Key.
+     *
+     * @param apiKey API Key used for Requests to FCM
+     */
     public AuthenticationRequestInterceptor(String apiKey) {
         this.apiKey = apiKey;
     }

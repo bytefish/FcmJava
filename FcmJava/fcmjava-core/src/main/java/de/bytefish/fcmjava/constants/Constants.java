@@ -7,10 +7,9 @@ public class Constants {
 
     private Constants() {}
 
+    /**
+     * The URL of the FCM Endpoint.
+     */
     public static String FCM_URL = "https://fcm.googleapis.com/fcm/send";
-
-    public static String FCM_PATH_SEND = "send";
-
-    public static String FCM_PATH_NOTIFICATION = "notification";
 
 }

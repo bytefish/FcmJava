@@ -3,6 +3,9 @@
 
 package de.bytefish.fcmjava.exceptions;
 
+/**
+ * This Exception is thrown, if a Bad Request to FCM was made.
+ */
 public class FcmBadRequestException extends FcmException {
 
     public FcmBadRequestException() {

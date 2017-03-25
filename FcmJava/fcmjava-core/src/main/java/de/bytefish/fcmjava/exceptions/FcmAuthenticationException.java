@@ -3,6 +3,9 @@
 
 package de.bytefish.fcmjava.exceptions;
 
+/**
+ * This Exception is thrown, if the Authentication with the FCM server failed.
+ */
 public class FcmAuthenticationException extends FcmException {
 
     public FcmAuthenticationException() {

@@ -8,6 +8,9 @@ import de.bytefish.fcmjava.client.functional.Func1;
 import de.bytefish.fcmjava.client.retry.strategy.IRetryStrategy;
 import de.bytefish.fcmjava.client.retry.strategy.SimpleRetryStrategy;
 
+/**
+ * This class implements RetryStrategies, for explicitly retrying requests to the FCM server.
+ */
 public class RetryUtils {
 
     /**
