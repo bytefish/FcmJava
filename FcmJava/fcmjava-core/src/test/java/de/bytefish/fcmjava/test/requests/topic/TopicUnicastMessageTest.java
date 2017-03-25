@@ -1,13 +1,14 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.requests.topic;
+package de.bytefish.fcmjava.test.requests.topic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.groups.AddDeviceGroupMessage;
 import de.bytefish.fcmjava.requests.notification.NotificationPayload;
+import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import org.junit.Assert;
 import org.junit.Test;
 

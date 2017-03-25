@@ -1,12 +1,13 @@
 // Copyright (c) Philipp Wagner. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-package de.bytefish.fcmjava.requests.groups;
+package de.bytefish.fcmjava.test.requests.groups;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
+import de.bytefish.fcmjava.requests.groups.AddDeviceGroupMessage;
 import org.junit.Assert;
 import org.junit.Test;
 
