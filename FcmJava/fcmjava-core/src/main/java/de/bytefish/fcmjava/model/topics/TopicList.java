@@ -21,7 +21,7 @@ public class TopicList {
 
     public String getTopicsCondition() {
         return topics.stream()
-                .map(topic -> String.format("'%s' in topics", topic))
+                .map(topic -> String.format("'%s' in topics", topic.getName()))
                 .collect(Collectors.joining(" || "));
     }
 }
