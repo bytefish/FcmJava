@@ -8,6 +8,7 @@ import de.bytefish.fcmjava.client.interceptors.request.AuthenticationRequestInte
 import de.bytefish.fcmjava.client.interceptors.request.JsonRequestInterceptor;
 import de.bytefish.fcmjava.client.interceptors.response.StatusResponseInterceptor;
 import de.bytefish.fcmjava.client.utils.JsonUtils;
+import de.bytefish.fcmjava.exceptions.FcmException;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -60,6 +61,8 @@ public class HttpClient implements IHttpClient {
     public <TRequestMessage, TResponseMessage> TResponseMessage post(TRequestMessage requestMessage, Class<TResponseMessage> responseType) {
         try {
             return internalPost(requestMessage, responseType);
+        } catch(FcmException e) {
+            throw e;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -68,6 +71,8 @@ public class HttpClient implements IHttpClient {
     public <TRequestMessage> void post(TRequestMessage requestMessage) {
         try {
             internalPost(requestMessage);
+        } catch(FcmException e) {
+            throw e;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
