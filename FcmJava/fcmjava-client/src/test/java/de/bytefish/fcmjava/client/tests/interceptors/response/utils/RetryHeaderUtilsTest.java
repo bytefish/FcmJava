@@ -3,7 +3,7 @@
 
 package de.bytefish.fcmjava.client.tests.interceptors.response.utils;
 
-import de.bytefish.fcmjava.client.interceptors.response.utils.RetryHeaderUtils;
+import de.bytefish.fcmjava.client.http.apache.utils.RetryHeaderUtils;
 import de.bytefish.fcmjava.client.utils.DateUtils;
 import de.bytefish.fcmjava.client.utils.OutParameter;
 import org.apache.http.Header;

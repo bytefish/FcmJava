@@ -3,7 +3,7 @@
 
 package de.bytefish.fcmjava.client;
 
-import de.bytefish.fcmjava.client.http.HttpClient;
+import de.bytefish.fcmjava.client.http.apache.DefaultHttpClient;
 import de.bytefish.fcmjava.client.http.IHttpClient;
 import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
 import de.bytefish.fcmjava.http.client.IFcmClient;
@@ -31,7 +31,7 @@ public class FcmClient implements IFcmClient {
     }
 
     public FcmClient(IFcmClientSettings settings) {
-        this(settings, new HttpClient(settings));
+        this(settings, new DefaultHttpClient(settings));
     }
 
     public FcmClient(IFcmClientSettings settings, IHttpClient httpClient) {

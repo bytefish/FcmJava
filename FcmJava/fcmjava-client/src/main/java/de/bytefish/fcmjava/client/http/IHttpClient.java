@@ -4,7 +4,7 @@
 package de.bytefish.fcmjava.client.http;
 
 /**
- * An HttpClient is used to send Requests to FCM.
+ * An DefaultHttpClient is used to send Requests to FCM.
  */
 public interface IHttpClient {
 
