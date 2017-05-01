@@ -12,13 +12,13 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-core</artifactId>
-  <version>1.2</version>
+  <version>2.0</version>
 </dependency>
 
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-client</artifactId>
-  <version>1.2</version>
+  <version>2.0</version>
 </dependency>
 ```
 
@@ -75,7 +75,7 @@ public class FcmClientIntegrationTest {
     public void SendTopicMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient();
+        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
@@ -83,7 +83,14 @@ public class FcmClientIntegrationTest {
                 .build();
 
         // Send a Message:
-        client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+        TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+
+        // Assert Results:
+        Assert.assertNotNull(response);
+
+        // Make sure there are no errors:
+        Assert.assertNotNull(response.getMessageId());
+        Assert.assertNull(response.getErrorCode());
     }
 }
 ```
@@ -179,10 +186,9 @@ public class FcmClientSettingsTest {
 [Apache HttpClient]: http://hc.apache.org/httpcomponents-client-ga/
 [HttpClientBuilder]: http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html
 
-[FcmJava] uses [Apache HttpClient] for making requests to the Firebase Cloud Messaging server.
-
-In order to configure a proxy for the HTTP requests, you can configure the [HttpClientBuilder] used in [FcmJava]. This is done by 
-instantiating the ``HttpClient`` with your settings and then calling the ``configure`` method on it.
+[FcmJava] uses [Apache HttpClient] for making requests to the Firebase Cloud Messaging server. So in order to configure 
+a proxy for the HTTP requests, you can configure the [HttpClientBuilder] used in [FcmJava]. This is done by instantiating 
+the ``DefaultHttpClient`` with your configured [HttpClientBuilder].
 
 The following test shows how to build the ``FcmClient`` with a custom ``HttpClient``, which configures a Proxy for the [HttpClientBuilder].
 
@@ -193,58 +199,56 @@ The following test shows how to build the ``FcmClient`` with a custom ``HttpClie
 package de.bytefish.fcmjava.client.tests;
 
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.client.http.HttpClient;
+import de.bytefish.fcmjava.client.http.apache.DefaultHttpClient;
 import de.bytefish.fcmjava.http.client.IFcmClient;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.junit.Test;
 
-class MockFcmClientSettings implements IFcmClientSettings {
+class FakeFcmClientSettings implements IFcmClientSettings {
 
     @Override
     public String getFcmUrl() {
-        return "fcm_url";
+        return "";
     }
 
     @Override
     public String getApiKey() {
-        return "your_api_key";
+        return "";
     }
 }
 
 public class HttpBuilderConfigurationTest {
 
+
     @Test
     public void testFcmClientWithProxySettings() {
 
         // Create Settings:
-        IFcmClientSettings settings = new MockFcmClientSettings();
+        IFcmClientSettings settings = new FakeFcmClientSettings();
 
-        // Create the HttpClient:
-        HttpClient httpClient = new HttpClient(settings);
+        // Define the Credentials to be used:
+        BasicCredentialsProvider basicCredentialsProvider = new BasicCredentialsProvider();
 
-        // And configure the HttpClient:
-        httpClient.configure((httpClientBuilder -> {
+        // Set the Credentials (any auth scope used):
+        basicCredentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("your_username", "your_password"));
 
-            // Define the Credentials to be used:
-            BasicCredentialsProvider basicCredentialsProvider = new BasicCredentialsProvider();
+        // Create the Apache HttpClientBuilder:
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
+                // Set the Proxy Address:
+                .setProxy(new HttpHost("your_hostname", 1234))
+                // Set the Authentication Strategy:
+                .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy())
+                // Set the Credentials Provider we built above:
+                .setDefaultCredentialsProvider(basicCredentialsProvider);
 
-            // Set the Credentials (any auth scope used):
-            basicCredentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("your_username", "your_password"));
-            
-            // Now configure the HttpClientBuilder:
-            httpClientBuilder
-                    // Set the Proxy Address:
-                    .setProxy(new HttpHost("your_hostname", 1234))
-                    // Set the Authentication Strategy:
-                    .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy())
-                    // Set the Credentials Provider we built above:
-                    .setDefaultCredentialsProvider(basicCredentialsProvider);
-        }));
+        // Create the DefaultHttpClient:
+        DefaultHttpClient httpClient = new DefaultHttpClient(settings, httpClientBuilder);
 
         // Finally build the FcmClient:
         IFcmClient client = new FcmClient(settings, httpClient);

@@ -65,6 +65,10 @@ public class FcmClientIntegrationTest {
 
         // Assert Results:
         Assert.assertNotNull(response);
+
+        // Make sure there are no errors:
+        Assert.assertNotNull(response.getMessageId());
+        Assert.assertNull(response.getErrorCode());
     }
 
     @Test
