@@ -7,10 +7,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.TopicList;
+import de.bytefish.fcmjava.requests.FcmMessage;
 import de.bytefish.fcmjava.requests.FcmUnicastMessage;
 import de.bytefish.fcmjava.requests.notification.NotificationPayload;
 
-public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
+public class TopicMulticastMessage extends FcmMessage<Object> {
 
     private final String condition;
     private final Object data;
@@ -26,7 +27,7 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
     public TopicMulticastMessage(FcmMessageOptions options, TopicList topicList, Object data, NotificationPayload notification) {
 
-        super(options, null);
+        super(options);
 
         if(topicList == null) {
             throw new IllegalArgumentException("topicList");
@@ -47,7 +48,7 @@ public class TopicMulticastMessage extends FcmUnicastMessage<Object> {
 
     public TopicMulticastMessage(FcmMessageOptions options, String condition, Object data, NotificationPayload notification) {
 
-        super(options, null);
+        super(options);
 
         if(condition == null) {
             throw new IllegalArgumentException("condition");

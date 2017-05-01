@@ -10,6 +10,8 @@ import de.bytefish.fcmjava.client.tests.testutils.DateUtils;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.topics.Topic;
 import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
+import de.bytefish.fcmjava.responses.TopicMessageResponse;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -260,6 +262,11 @@ public class WeatherWarningIntegrationTest {
         WarningMessage message = new WarningMessage(WarningTypeEnum.SevereHeatWarning, warning);
 
         // Send the Warning Message to FCM:
-        client.send(new TopicUnicastMessage(options, topic, message));
+        TopicMessageResponse response = client.send(new TopicUnicastMessage(options, topic, message));
+
+        // Assert Result is OK:
+        Assert.assertNotNull(response);
+
+        Assert.assertNull(response.getErrorCode());
     }
 }

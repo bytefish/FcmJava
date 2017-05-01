@@ -15,6 +15,10 @@ public abstract class FcmUnicastMessage<TPayload> extends FcmMessage<TPayload> {
     public FcmUnicastMessage(FcmMessageOptions options, String to) {
         super(options);
 
+        if(to == null) {
+            throw new IllegalArgumentException("to");
+        }
+
         this.to = to;
     }
 

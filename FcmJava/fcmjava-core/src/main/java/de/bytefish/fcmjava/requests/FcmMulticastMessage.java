@@ -17,6 +17,10 @@ public abstract class FcmMulticastMessage<TPayload> extends FcmMessage<TPayload>
     public FcmMulticastMessage(FcmMessageOptions options, List<String> registrationIds) {
         super(options);
 
+        if(registrationIds == null) {
+            throw new IllegalArgumentException("registrationIds");
+        }
+
         this.registrationIds = registrationIds;
     }
 

@@ -14,6 +14,10 @@ public class NotificationUnicastMessage extends FcmUnicastMessage<NotificationPa
     public NotificationUnicastMessage(FcmMessageOptions options, String to, NotificationPayload notificationPayload) {
         super(options, to);
 
+        if(notificationPayload == null) {
+            throw new IllegalArgumentException("notificationPayload");
+        }
+
         this.notificationPayload = notificationPayload;
     }
 

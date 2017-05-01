@@ -16,6 +16,10 @@ public class NotificationMulticastMessage extends FcmMulticastMessage<Notificati
     public NotificationMulticastMessage(FcmMessageOptions options, List<String> registrationIds, NotificationPayload notificationPayload) {
         super(options, registrationIds);
 
+        if(notificationPayload == null) {
+            throw new IllegalArgumentException("notificationPayload");
+        }
+
         this.notificationPayload = notificationPayload;
     }
 

@@ -13,6 +13,9 @@ public abstract class FcmMessage<TPayload> {
     private final FcmMessageOptions options;
 
     public FcmMessage(FcmMessageOptions options) {
+        if(options == null) {
+            throw new IllegalArgumentException("options");
+        }
         this.options = options;
     }
 
