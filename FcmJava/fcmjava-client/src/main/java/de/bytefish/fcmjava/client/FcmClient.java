@@ -36,11 +36,11 @@ public class FcmClient implements IFcmClient {
 
     public FcmClient(IFcmClientSettings settings, IHttpClient httpClient) {
 
-        if(settings == null) {
+        if (settings == null) {
             throw new IllegalArgumentException("settings");
         }
 
-        if(httpClient == null) {
+        if (httpClient == null) {
             throw new IllegalArgumentException("httpClient");
         }
 
@@ -99,5 +99,10 @@ public class FcmClient implements IFcmClient {
 
     protected <TRequestMessage> void post(TRequestMessage requestMessage) {
         httpClient.post(requestMessage);
+    }
+
+    @Override
+    public void close() throws Exception {
+        httpClient.close();
     }
 }

@@ -16,7 +16,7 @@ import de.bytefish.fcmjava.responses.CreateDeviceGroupMessageResponse;
 import de.bytefish.fcmjava.responses.FcmMessageResponse;
 import de.bytefish.fcmjava.responses.TopicMessageResponse;
 
-public interface IFcmClient {
+public interface IFcmClient extends AutoCloseable {
 
     FcmMessageResponse send(DataMulticastMessage message);
 
@@ -35,7 +35,5 @@ public interface IFcmClient {
     void send(RemoveDeviceGroupMessage message);
 
     void send(AddDeviceGroupMessage message);
-
-
     
 }

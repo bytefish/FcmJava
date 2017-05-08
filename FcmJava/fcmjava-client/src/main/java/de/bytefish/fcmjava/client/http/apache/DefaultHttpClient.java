@@ -9,9 +9,11 @@ import de.bytefish.fcmjava.client.utils.JsonUtils;
 import de.bytefish.fcmjava.client.utils.OutParameter;
 import de.bytefish.fcmjava.exceptions.*;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
@@ -32,7 +34,7 @@ import java.time.Duration;
 public class DefaultHttpClient implements IHttpClient {
 
     private final IFcmClientSettings settings;
-    private final HttpClientBuilder httpClientBuilder;
+    private final CloseableHttpClient client;
 
     public DefaultHttpClient(IFcmClientSettings settings) {
         this(settings, HttpClientBuilder.create());
@@ -40,70 +42,65 @@ public class DefaultHttpClient implements IHttpClient {
 
     public DefaultHttpClient(IFcmClientSettings settings, HttpClientBuilder httpClientBuilder) {
 
-        if(settings == null) {
+        if (settings == null) {
             throw new IllegalArgumentException("settings");
         }
 
-        if(httpClientBuilder == null) {
+        if (httpClientBuilder == null) {
             throw new IllegalArgumentException("httpClientBuilder");
         }
 
         this.settings = settings;
-        this.httpClientBuilder = httpClientBuilder;
+        this.client = httpClientBuilder.build();
     }
 
 
     private <TRequestMessage> void internalPost(TRequestMessage requestMessage) throws IOException {
 
-        try (CloseableHttpClient client = httpClientBuilder.build()) {
+        // Execute the Request:
+        try (CloseableHttpResponse response = client.execute(buildPostRequest(requestMessage))) {
 
-            // Execute the Request:
-            try(CloseableHttpResponse response = client.execute(buildPostRequest(requestMessage))) {
+            // Evaluate the Response:
+            evaluateResponse(response);
 
-                // Evaluate the Response:
-                evaluateResponse(response);
+            // Get the HttpEntity:
+            HttpEntity entity = response.getEntity();
 
-                // Get the HttpEntity:
-                HttpEntity entity = response.getEntity();
+            // Let's be a good citizen and consume the HttpEntity:
+            if (entity != null) {
 
-                // Let's be a good citizen and consume the HttpEntity:
-                if(entity != null) {
-
-                    // Make Sure it is fully consumed:
-                    EntityUtils.consume(entity);
-                }
+                // Make Sure it is fully consumed:
+                EntityUtils.consume(entity);
             }
         }
+
     }
 
     private <TRequestMessage, TResponseMessage> TResponseMessage internalPost(TRequestMessage requestMessage, Class<TResponseMessage> responseType) throws IOException {
 
-        try(CloseableHttpClient client = httpClientBuilder.build()) {
+        // Execute the Request:
+        try (CloseableHttpResponse response = client.execute(buildPostRequest(requestMessage))) {
 
-            // Execute the Request:
-            try(CloseableHttpResponse response = client.execute(buildPostRequest(requestMessage))) {
+            // Evaluate the Response:
+            evaluateResponse(response);
 
-                // Evaluate the Response:
-                evaluateResponse(response);
+            // Get the HttpEntity of the Response:
+            HttpEntity entity = response.getEntity();
 
-                // Get the HttpEntity of the Response:
-                HttpEntity entity = response.getEntity();
-
-                // If we don't have a HttpEntity, we won't be able to convert it:
-                if(entity == null) {
-                    // Simply return null (no response) in this case:
-                    return null;
-                }
-
-                // Get the JSON Body:
-                String responseBody = EntityUtils.toString(entity);
-
-                // Make Sure it is fully consumed:
-                EntityUtils.consume(entity);
-
-                // And finally return the Response Message:
-                return JsonUtils.getEntityFromString(responseBody, responseType);
+            // If we don't have a HttpEntity, we won't be able to convert it:
+            if (entity == null) {
+                // Simply return null (no response) in this case:
+                return null;
             }
+
+            // Get the JSON Body:
+            String responseBody = EntityUtils.toString(entity);
+
+            // Make Sure it is fully consumed:
+            EntityUtils.consume(entity);
+
+            // And finally return the Response Message:
+            return JsonUtils.getEntityFromString(responseBody, responseType);
         }
     }
 
@@ -183,5 +180,10 @@ public class DefaultHttpClient implements IHttpClient {
         } catch (IOException e) {
             throw new FcmCommunicationException("Error making POST Request", e);
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        client.close();
     }
 }

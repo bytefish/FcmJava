@@ -6,7 +6,7 @@ package de.bytefish.fcmjava.client.http;
 /**
  * An DefaultHttpClient is used to send Requests to FCM.
  */
-public interface IHttpClient {
+public interface IHttpClient extends AutoCloseable {
 
     <TRequestMessage> void post(TRequestMessage requestMessage);
 

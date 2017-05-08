@@ -53,22 +53,23 @@ public class FcmClientIntegrationTest {
     public void SendTopicMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
+        try (FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault())) {
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(Duration.ofHours(1))
-                .build();
+            // Message Options:
+            FcmMessageOptions options = FcmMessageOptions.builder()
+                    .setTimeToLive(Duration.ofHours(1))
+                    .build();
 
-        // Send a Message:
-        TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+            // Send a Message:
+            TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
 
-        // Assert Results:
-        Assert.assertNotNull(response);
+            // Assert Results:
+            Assert.assertNotNull(response);
 
-        // Make sure there are no errors:
-        Assert.assertNotNull(response.getMessageId());
-        Assert.assertNull(response.getErrorCode());
+            // Make sure there are no errors:
+            Assert.assertNotNull(response.getMessageId());
+            Assert.assertNull(response.getErrorCode());
+        }
     }
 
     @Test
@@ -76,20 +77,22 @@ public class FcmClientIntegrationTest {
     public void SendDataMulticastMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
+        try (FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault())) {
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(Duration.ofHours(1))
-                .build();
+            // Message Options:
+            FcmMessageOptions options = FcmMessageOptions.builder()
+                    .setTimeToLive(Duration.ofHours(1))
+                    .build();
 
-        ArrayList<String> registrationIds = new ArrayList<>();
-        registrationIds.add("invalid_key");
+            ArrayList<String> registrationIds = new ArrayList<>();
+            registrationIds.add("invalid_key");
 
-        // Send a Message:
-        FcmMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
+            // Send a Message:
+            FcmMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
 
-        Assert.assertNotNull(msgResponse);
+            Assert.assertNotNull(msgResponse);
+
+        }
     }
 
     @Test
@@ -97,26 +100,27 @@ public class FcmClientIntegrationTest {
     public void SendDataBadRequestTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
+        try (FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault())) {
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(Duration.ofDays(356))
-                .build();
+            // Message Options:
+            FcmMessageOptions options = FcmMessageOptions.builder()
+                    .setTimeToLive(Duration.ofDays(356))
+                    .build();
 
-        ArrayList<String> registrationIds = new ArrayList<>();
-        registrationIds.add("invalid_key");
+            ArrayList<String> registrationIds = new ArrayList<>();
+            registrationIds.add("invalid_key");
 
-        // Send a Message:
-        boolean caughtFcmBadRequestException = false;
-        try {
-            FcmMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, ""));
-        } catch(FcmBadRequestException e) {
-            caughtFcmBadRequestException = true;
-            Assert.assertEquals("Bad Request", e.getMessage());
+            // Send a Message:
+            boolean caughtFcmBadRequestException = false;
+            try {
+                FcmMessageResponse msgResponse = client.send(new DataMulticastMessage(options, registrationIds, ""));
+            } catch (FcmBadRequestException e) {
+                caughtFcmBadRequestException = true;
+                Assert.assertEquals("Bad Request", e.getMessage());
+            }
+
+            Assert.assertEquals(true, caughtFcmBadRequestException);
         }
-
-        Assert.assertEquals(true, caughtFcmBadRequestException);
     }
 
     @Test
@@ -124,7 +128,7 @@ public class FcmClientIntegrationTest {
     public void SendDataMulticastMessageWithExceptionTest() throws Exception {
 
         // Create a Client with an Invalid API Key:
-        FcmClient client = new FcmClient(new IFcmClientSettings() {
+        try (FcmClient client = new FcmClient(new IFcmClientSettings() {
             @Override
             public String getFcmUrl() {
                 return Constants.FCM_URL;
@@ -134,28 +138,29 @@ public class FcmClientIntegrationTest {
             public String getApiKey() {
                 return "aa";
             }
-        });
+        })) {
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(Duration.ofHours(1))
-                .build();
+            // Message Options:
+            FcmMessageOptions options = FcmMessageOptions.builder()
+                    .setTimeToLive(Duration.ofHours(1))
+                    .build();
 
-        ArrayList<String> registrationIds = new ArrayList<>();
+            ArrayList<String> registrationIds = new ArrayList<>();
 
-        registrationIds.add("invalid_key");
+            registrationIds.add("invalid_key");
 
-        // We want to catch an FcmAuthenticationException:
-        boolean fcmAuthenticationExceptionThrown = false;
+            // We want to catch an FcmAuthenticationException:
+            boolean fcmAuthenticationExceptionThrown = false;
 
-        // Send the Data and catch the FcmAuthenticationException:
-        try {
-            client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
-        } catch(FcmAuthenticationException e) {
-            fcmAuthenticationExceptionThrown = true;
+            // Send the Data and catch the FcmAuthenticationException:
+            try {
+                client.send(new DataMulticastMessage(options, registrationIds, new PersonData("Philipp", "Wagner")));
+            } catch (FcmAuthenticationException e) {
+                fcmAuthenticationExceptionThrown = true;
+            }
+
+            // The Authentication Exception was caught:
+            Assert.assertEquals(true, fcmAuthenticationExceptionThrown);
         }
-
-        // The Authentication Exception was caught:
-        Assert.assertEquals(true, fcmAuthenticationExceptionThrown);
     }
 }
