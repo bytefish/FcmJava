@@ -4,7 +4,7 @@
 package de.bytefish.fcmjava.exceptions;
 
 /**
- * This Exception is thrown, if the FCM Server was unavailable. You should retry the Operation using
+ * This Exception is thrown, if the FCM Server was unavailable.
  */
 public class FcmUnavailableException extends FcmException {
 

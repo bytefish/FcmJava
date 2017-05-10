@@ -12,13 +12,13 @@ You can add the following dependencies to your pom.xml to include [FcmJava] in y
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-core</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
 </dependency>
 
 <dependency>
   <groupId>de.bytefish.fcmjava</groupId>
   <artifactId>fcmjava-client</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
 </dependency>
 ```
 
@@ -75,22 +75,23 @@ public class FcmClientIntegrationTest {
     public void SendTopicMessageTest() throws Exception {
 
         // Create the Client using system-properties-based settings:
-        FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault());
+        try (FcmClient client = new FcmClient(PropertiesBasedSettings.createFromDefault())) {
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .setTimeToLive(Duration.ofHours(1))
-                .build();
+            // Message Options:
+            FcmMessageOptions options = FcmMessageOptions.builder()
+                    .setTimeToLive(Duration.ofHours(1))
+                    .build();
 
-        // Send a Message:
-        TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
+            // Send a Message:
+            TopicMessageResponse response = client.send(new TopicUnicastMessage(options, new Topic("news"), new PersonData("Philipp", "Wagner")));
 
-        // Assert Results:
-        Assert.assertNotNull(response);
+            // Assert Results:
+            Assert.assertNotNull(response);
 
-        // Make sure there are no errors:
-        Assert.assertNotNull(response.getMessageId());
-        Assert.assertNull(response.getErrorCode());
+            // Make sure there are no errors:
+            Assert.assertNotNull(response.getMessageId());
+            Assert.assertNull(response.getErrorCode());
+        }
     }
 }
 ```
@@ -180,7 +181,7 @@ public class FcmClientSettingsTest {
 
 }
 ```
-    
+
 ### Configuring a Proxy ###
 
 [Apache HttpClient]: http://hc.apache.org/httpcomponents-client-ga/
