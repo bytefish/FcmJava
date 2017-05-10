@@ -32,7 +32,7 @@ public class HttpBuilderConfigurationTest {
 
 
     @Test
-    public void testFcmClientWithProxySettings() {
+    public void testFcmClientWithProxySettings() throws Exception {
 
         // Create Settings:
         IFcmClientSettings settings = new FakeFcmClientSettings();
@@ -56,6 +56,8 @@ public class HttpBuilderConfigurationTest {
         DefaultHttpClient httpClient = new DefaultHttpClient(settings, httpClientBuilder);
 
         // Finally build the FcmClient:
-        IFcmClient client = new FcmClient(settings, httpClient);
+        try(IFcmClient client = new FcmClient(settings, httpClient)) {
+            // TODO Work with the Proxy ...
+        }
     }
 }
