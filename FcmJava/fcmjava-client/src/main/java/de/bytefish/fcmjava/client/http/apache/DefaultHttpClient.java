@@ -3,12 +3,20 @@
 
 package de.bytefish.fcmjava.client.http.apache;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bytefish.fcmjava.client.http.IHttpClient;
 import de.bytefish.fcmjava.client.http.apache.utils.RetryHeaderUtils;
-import de.bytefish.fcmjava.client.utils.JsonUtils;
 import de.bytefish.fcmjava.client.utils.OutParameter;
-import de.bytefish.fcmjava.exceptions.*;
+import de.bytefish.fcmjava.exceptions.FcmAuthenticationException;
+import de.bytefish.fcmjava.exceptions.FcmBadRequestException;
+import de.bytefish.fcmjava.exceptions.FcmCommunicationException;
+import de.bytefish.fcmjava.exceptions.FcmGeneralException;
+import de.bytefish.fcmjava.exceptions.FcmRetryAfterException;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -21,10 +29,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-
 /**
  * This DefaultHttpClient is based on the Apache DefaultHttpClient.
  *
@@ -35,6 +39,8 @@ public class DefaultHttpClient implements IHttpClient {
 
     private final IFcmClientSettings settings;
     private final CloseableHttpClient client;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public DefaultHttpClient(IFcmClientSettings settings) {
         this(settings, HttpClientBuilder.create());
@@ -54,6 +60,14 @@ public class DefaultHttpClient implements IHttpClient {
         this.client = httpClientBuilder.build();
     }
 
+    public void setObjectMapper(ObjectMapper objectMapper) {
+
+        if (objectMapper == null) {
+            throw new IllegalArgumentException("objectMapper");
+        }
+
+        this.objectMapper = objectMapper;
+    }
 
     private <TRequestMessage> void internalPost(TRequestMessage requestMessage) throws IOException {
 
@@ -100,20 +114,46 @@ public class DefaultHttpClient implements IHttpClient {
             EntityUtils.consume(entity);
 
             // And finally return the Response Message:
-            return JsonUtils.getEntityFromString(responseBody, responseType);
+            return fromJson(responseBody, responseType);
+        }
+    }
+
+    private <TEntity> TEntity fromJson(String responseBody, Class<TEntity> valueType) {
+
+        if(responseBody == null) {
+            throw new IllegalArgumentException("responseBody");
+        }
+
+        try {
+            return objectMapper.readValue(responseBody, valueType);
+        } catch(Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     private <TRequestMessage> HttpUriRequest buildPostRequest(TRequestMessage requestMessage) {
 
         // Get the JSON representation of the given request message:
-        String content = JsonUtils.getAsJsonString(requestMessage);
+        String content = convertToJson(requestMessage);
 
         return RequestBuilder.post(settings.getFcmUrl())
                 .addHeader(HttpHeaders.AUTHORIZATION, String.format("key=%s", settings.getApiKey()))
                 .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .setEntity(new StringEntity(content, StandardCharsets.UTF_8))
                 .build();
+    }
+
+    private <TRequestMessage> String convertToJson(TRequestMessage requestMessage) {
+
+        if (requestMessage == null) {
+            throw new IllegalArgumentException("requestMessage");
+        }
+
+        try {
+            return objectMapper.writeValueAsString(requestMessage);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void evaluateResponse(HttpResponse httpResponse) {
