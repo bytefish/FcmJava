@@ -8,13 +8,13 @@ import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.enums.OperationEnum;
 
 import java.lang.reflect.Type;
-import java.util.List;
+import java.util.Collection;
 
 public class AddDeviceGroupMessage extends DeviceGroupMessage {
 
     private final String notificationKey;
 
-    public AddDeviceGroupMessage(FcmMessageOptions options, List<String> registrationIds, String notificationKeyName, String notificationKey) {
+    public AddDeviceGroupMessage(FcmMessageOptions options, Collection<String> registrationIds, String notificationKeyName, String notificationKey) {
         super(options, registrationIds, notificationKeyName);
 
         this.notificationKey = notificationKey;

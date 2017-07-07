@@ -6,11 +6,11 @@ package de.bytefish.fcmjava.requests.groups;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.enums.OperationEnum;
 
-import java.util.List;
+import java.util.Collection;
 
 public class CreateDeviceGroupMessage extends DeviceGroupMessage {
 
-    public CreateDeviceGroupMessage(FcmMessageOptions options, List<String> registrationIds, String notificationKeyName) {
+    public CreateDeviceGroupMessage(FcmMessageOptions options, Collection<String> registrationIds, String notificationKeyName) {
         super(options, registrationIds, notificationKeyName);
     }
 

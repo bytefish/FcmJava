@@ -7,14 +7,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 
-import java.util.List;
+import java.util.Collection;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class FcmMulticastMessage<TPayload> extends FcmMessage<TPayload> {
 
-    private final List<String> registrationIds;
+    private final Collection<String> registrationIds;
 
-    public FcmMulticastMessage(FcmMessageOptions options, List<String> registrationIds) {
+    public FcmMulticastMessage(FcmMessageOptions options, Collection<String> registrationIds) {
         super(options);
 
         if(registrationIds == null) {
@@ -25,7 +25,7 @@ public abstract class FcmMulticastMessage<TPayload> extends FcmMessage<TPayload>
     }
 
     @JsonProperty("registration_ids")
-    public List<String> getRegistrationIds() {
+    public Collection<String> getRegistrationIds() {
         return registrationIds;
     }
 
