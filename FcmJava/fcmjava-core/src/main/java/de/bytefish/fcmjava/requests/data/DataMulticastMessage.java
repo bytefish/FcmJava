@@ -9,19 +9,19 @@ import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.requests.FcmMulticastMessage;
 import de.bytefish.fcmjava.requests.notification.NotificationPayload;
 
-import java.util.List;
+import java.util.Collection;
 
 public class DataMulticastMessage extends FcmMulticastMessage<Object> {
 
     private final Object data;
     private final NotificationPayload notification;
 
-    public DataMulticastMessage(FcmMessageOptions options, List<String> registratiodIds, Object data) {
-        this(options, registratiodIds, data, null);
+    public DataMulticastMessage(FcmMessageOptions options, Collection<String> registrationIds, Object data) {
+        this(options, registrationIds, data, null);
     }
 
-    public DataMulticastMessage(FcmMessageOptions options, List<String> registratiodIds, Object data, NotificationPayload notification) {
-        super(options, registratiodIds);
+    public DataMulticastMessage(FcmMessageOptions options, Collection<String> registrationIds, Object data, NotificationPayload notification) {
+        super(options, registrationIds);
 
         this.data = data;
         this.notification = notification;

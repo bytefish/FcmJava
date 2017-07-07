@@ -8,13 +8,13 @@ import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.requests.FcmMulticastMessage;
 import de.bytefish.fcmjava.model.enums.OperationEnum;
 
-import java.util.List;
+import java.util.Collection;
 
 public abstract class DeviceGroupMessage extends FcmMulticastMessage<String> {
 
     private final String notificationKeyName;
 
-    public DeviceGroupMessage(FcmMessageOptions options, List<String> registrationIds, String notificationKeyName) {
+    public DeviceGroupMessage(FcmMessageOptions options, Collection<String> registrationIds, String notificationKeyName) {
         super(options, registrationIds);
 
         this.notificationKeyName = notificationKeyName;

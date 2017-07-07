@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bytefish.fcmjava.model.options.FcmMessageOptions;
 import de.bytefish.fcmjava.model.enums.OperationEnum;
 
-import java.util.List;
+import java.util.Collection;
 
 public class RemoveDeviceGroupMessage extends DeviceGroupMessage{
 
     private final String notificationKey;
 
-    public RemoveDeviceGroupMessage(FcmMessageOptions options, List<String> registrationIds, String notificationKeyName, String notificationKey) {
+    public RemoveDeviceGroupMessage(FcmMessageOptions options, Collection<String> registrationIds, String notificationKeyName, String notificationKey) {
         super(options, registrationIds, notificationKeyName);
 
         this.notificationKey = notificationKey;
