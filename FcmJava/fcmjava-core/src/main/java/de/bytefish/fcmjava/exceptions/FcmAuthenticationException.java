@@ -14,5 +14,4 @@ public class FcmAuthenticationException extends FcmException {
         super(HttpStatus.UNAUTHORIZED, httpReasonPhrase);
     }
 
-
 }
