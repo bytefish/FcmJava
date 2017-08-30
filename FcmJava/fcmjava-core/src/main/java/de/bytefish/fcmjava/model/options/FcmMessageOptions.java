@@ -17,8 +17,9 @@ public class FcmMessageOptions {
     private final int timeToLive;
     private final String restrictedPackageName;
     private final Boolean dryRun;
+    private final Boolean mutableContent;
 
-    public FcmMessageOptions(String condition, String collapseKey, PriorityEnum priorityEnum, Boolean contentAvailable, Boolean delayWhileIdle, int timeToLive, String restrictedPackageName, Boolean dryRun) {
+    public FcmMessageOptions(String condition, String collapseKey, PriorityEnum priorityEnum, Boolean contentAvailable, Boolean delayWhileIdle, int timeToLive, String restrictedPackageName, Boolean dryRun, Boolean mutableContent) {
         this.condition = condition;
         this.collapseKey = collapseKey;
         this.priorityEnum = priorityEnum;
@@ -27,6 +28,7 @@ public class FcmMessageOptions {
         this.timeToLive = timeToLive;
         this.restrictedPackageName = restrictedPackageName;
         this.dryRun = dryRun;
+        this.mutableContent = mutableContent;
     }
 
     public String getCondition() {
@@ -59,6 +61,10 @@ public class FcmMessageOptions {
 
     public Boolean getDryRun() {
         return dryRun;
+    }
+
+    public Boolean getMutableContent() {
+        return mutableContent;
     }
 
     public static FcmMessageOptionsBuilder builder() {

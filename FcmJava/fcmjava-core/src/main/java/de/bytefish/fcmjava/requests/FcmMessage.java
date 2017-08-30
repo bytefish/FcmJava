@@ -59,6 +59,11 @@ public abstract class FcmMessage<TPayload> {
         return options.getDryRun();
     }
 
+    @JsonProperty("mutable_content")
+    public Boolean getMutableContent() {
+        return options.getMutableContent();
+    }
+
     public abstract TPayload getPayload();
 
 }

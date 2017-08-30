@@ -18,6 +18,7 @@ public class FcmMessageOptionsBuilder {
     private int timeToLive = 60;
     private String restrictedPackageName = null;
     private Boolean dryRun = null;
+    private Boolean mutableContent = null;
 
     public FcmMessageOptionsBuilder setCondition(String condition) {
         this.condition = condition;
@@ -67,7 +68,13 @@ public class FcmMessageOptionsBuilder {
         return this;
     }
 
+    public FcmMessageOptionsBuilder setMutableContent(Boolean mutableContent) {
+        this.mutableContent = mutableContent;
+
+        return this;
+    }
+
     public FcmMessageOptions build() {
-        return new FcmMessageOptions(condition, collapseKey, priorityEnum, contentAvailable, delayWhileIdle, timeToLive, restrictedPackageName, dryRun);
+        return new FcmMessageOptions(condition, collapseKey, priorityEnum, contentAvailable, delayWhileIdle, timeToLive, restrictedPackageName, dryRun, mutableContent);
     }
 }
