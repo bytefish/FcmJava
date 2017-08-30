@@ -12,4 +12,12 @@ public abstract class FcmException extends RuntimeException {
         this.httpStatusCode = httpStatusCode;
         this.reasonPhrase = reasonPhrase;
     }
+
+    public int getHttpStatusCode() {
+        return httpStatusCode;
+    }
+
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
 }
