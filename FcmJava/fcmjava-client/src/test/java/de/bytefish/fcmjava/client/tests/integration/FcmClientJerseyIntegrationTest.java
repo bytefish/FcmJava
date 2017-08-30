@@ -74,7 +74,12 @@ public class FcmClientJerseyIntegrationTest extends JerseyTest {
     public void test500_withoutRetryAfter() throws Exception {
         restResource.response = Response.status(500).build();
 
-        sendSimpleMessage();
+        try {
+            sendSimpleMessage();
+        } catch(FcmGeneralException e) {
+            Assert.assertEquals(500, e.getHttpStatusCode());
+            throw e;
+        }
     }
 
     @Test(expected = FcmBadRequestException.class)
