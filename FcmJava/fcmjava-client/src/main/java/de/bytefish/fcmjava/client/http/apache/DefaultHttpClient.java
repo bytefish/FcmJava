@@ -5,7 +5,8 @@ package de.bytefish.fcmjava.client.http.apache;
 
 import de.bytefish.fcmjava.client.http.IHttpClient;
 import de.bytefish.fcmjava.client.http.apache.utils.RetryHeaderUtils;
-import de.bytefish.fcmjava.client.utils.JsonUtils;
+import de.bytefish.fcmjava.client.serializer.IJsonSerializer;
+import de.bytefish.fcmjava.client.serializer.JsonSerializer;
 import de.bytefish.fcmjava.client.utils.OutParameter;
 import de.bytefish.fcmjava.exceptions.*;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
@@ -34,6 +35,7 @@ import java.time.Duration;
 public class DefaultHttpClient implements IHttpClient {
 
     private final IFcmClientSettings settings;
+    private final IJsonSerializer serializer;
     private final CloseableHttpClient client;
 
     public DefaultHttpClient(IFcmClientSettings settings) {
@@ -41,6 +43,14 @@ public class DefaultHttpClient implements IHttpClient {
     }
 
     public DefaultHttpClient(IFcmClientSettings settings, HttpClientBuilder httpClientBuilder) {
+        this(settings, new JsonSerializer(), httpClientBuilder);
+    }
+
+    public DefaultHttpClient(IFcmClientSettings settings, IJsonSerializer serializer) {
+        this(settings, serializer, HttpClientBuilder.create());
+    }
+
+    public DefaultHttpClient(IFcmClientSettings settings, IJsonSerializer serializer, HttpClientBuilder httpClientBuilder) {
 
         if (settings == null) {
             throw new IllegalArgumentException("settings");
@@ -50,7 +60,12 @@ public class DefaultHttpClient implements IHttpClient {
             throw new IllegalArgumentException("httpClientBuilder");
         }
 
+        if(serializer == null) {
+            throw new IllegalArgumentException("serializer");
+        }
+
         this.settings = settings;
+        this.serializer = serializer;
         this.client = httpClientBuilder.build();
     }
 
@@ -100,14 +115,14 @@ public class DefaultHttpClient implements IHttpClient {
             EntityUtils.consume(entity);
 
             // And finally return the Response Message:
-            return JsonUtils.getEntityFromString(responseBody, responseType);
+            return serializer.deserialize(responseBody, responseType);
         }
     }
 
     private <TRequestMessage> HttpUriRequest buildPostRequest(TRequestMessage requestMessage) {
 
         // Get the JSON representation of the given request message:
-        String content = JsonUtils.getAsJsonString(requestMessage);
+        String content = serializer.serialize(requestMessage);
 
         return RequestBuilder.post(settings.getFcmUrl())
                 .addHeader(HttpHeaders.AUTHORIZATION, String.format("key=%s", settings.getApiKey()))
