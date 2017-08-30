@@ -5,23 +5,11 @@ package de.bytefish.fcmjava.exceptions;
 
 public abstract class FcmException extends RuntimeException {
 
-    public FcmException() {
-    }
+    private final int httpStatusCode;
+    private final String reasonPhrase;
 
-    public FcmException(String message) {
-        super(message);
+    public FcmException(int httpStatusCode, String reasonPhrase) {
+        this.httpStatusCode = httpStatusCode;
+        this.reasonPhrase = reasonPhrase;
     }
-
-    public FcmException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FcmException(Throwable cause) {
-        super(cause);
-    }
-
-    public FcmException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
 }

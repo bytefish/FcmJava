@@ -3,28 +3,16 @@
 
 package de.bytefish.fcmjava.exceptions;
 
+import de.bytefish.fcmjava.http.constants.HttpStatus;
+
 /**
  * This Exception is thrown, if the Authentication with the FCM server failed.
  */
 public class FcmAuthenticationException extends FcmException {
 
-    public FcmAuthenticationException() {
+    public FcmAuthenticationException(String httpReasonPhrase) {
+        super(HttpStatus.UNAUTHORIZED, httpReasonPhrase);
     }
 
-    public FcmAuthenticationException(String message) {
-        super(message);
-    }
-
-    public FcmAuthenticationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FcmAuthenticationException(Throwable cause) {
-        super(cause);
-    }
-
-    public FcmAuthenticationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 
 }

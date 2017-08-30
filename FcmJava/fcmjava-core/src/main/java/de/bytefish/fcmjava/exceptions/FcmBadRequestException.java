@@ -3,28 +3,17 @@
 
 package de.bytefish.fcmjava.exceptions;
 
+import de.bytefish.fcmjava.http.constants.HttpStatus;
+
 /**
  * This Exception is thrown, if a Bad Request to FCM was made.
  */
 public class FcmBadRequestException extends FcmException {
 
-    public FcmBadRequestException() {
+    public FcmBadRequestException(String httpReasonPhrase) {
+        super(HttpStatus.BAD_REQUEST, httpReasonPhrase);
     }
 
-    public FcmBadRequestException(String message) {
-        super(message);
-    }
 
-    public FcmBadRequestException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FcmBadRequestException(Throwable cause) {
-        super(cause);
-    }
-
-    public FcmBadRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 
 }

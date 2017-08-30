@@ -8,6 +8,7 @@ import de.bytefish.fcmjava.client.http.IHttpClient;
 import de.bytefish.fcmjava.client.retry.RetryUtils;
 import de.bytefish.fcmjava.exceptions.FcmRetryAfterException;
 import de.bytefish.fcmjava.http.client.IFcmClient;
+import de.bytefish.fcmjava.http.constants.HttpStatus;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import de.bytefish.fcmjava.client.tests.testutils.TestUtils;
 import de.bytefish.fcmjava.model.builders.FcmMessageOptionsBuilder;
@@ -45,7 +46,7 @@ public class FcmClientRetryTest {
         CreateDeviceGroupMessage createDeviceGroupMessage = new CreateDeviceGroupMessage(new FcmMessageOptionsBuilder().build(), new ArrayList<>(), "Unit Test");
 
         when(httpClientMock.post(createDeviceGroupMessage, CreateDeviceGroupMessageResponse.class))
-                .thenThrow(new FcmRetryAfterException(Duration.ZERO));
+                .thenThrow(new FcmRetryAfterException(HttpStatus.INTERNAL_SERVER_ERROR, "InternalServerError", Duration.ZERO));
 
         // Create the Test Subject:
         IFcmClient client = new FcmClient(settingsMock, httpClientMock);

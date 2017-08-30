@@ -5,23 +5,8 @@ package de.bytefish.fcmjava.exceptions;
 
 public class FcmGeneralException extends FcmException {
 
-    public FcmGeneralException() {
-    }
-
-    public FcmGeneralException(String message) {
-        super(message);
-    }
-
-    public FcmGeneralException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FcmGeneralException(Throwable cause) {
-        super(cause);
-    }
-
-    public FcmGeneralException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public FcmGeneralException(int httpStatusCode, String reasonPhrase) {
+        super(httpStatusCode, reasonPhrase);
     }
 
 }

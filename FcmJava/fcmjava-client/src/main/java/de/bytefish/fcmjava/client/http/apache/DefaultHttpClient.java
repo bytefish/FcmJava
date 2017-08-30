@@ -9,6 +9,7 @@ import de.bytefish.fcmjava.client.serializer.IJsonSerializer;
 import de.bytefish.fcmjava.client.serializer.JsonSerializer;
 import de.bytefish.fcmjava.client.utils.OutParameter;
 import de.bytefish.fcmjava.exceptions.*;
+import de.bytefish.fcmjava.http.exceptions.HttpCommunicationException;
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -172,11 +173,11 @@ public class DefaultHttpClient implements IHttpClient {
 
             // Try to determine the next interval we can send at:
             if (RetryHeaderUtils.tryDetermineRetryDelay(httpResponse, result)) {
-                throw new FcmRetryAfterException(result.get(), reasonPhrase);
+                throw new FcmRetryAfterException(httpStatusCode, reasonPhrase, result.get());
             }
         }
 
-        throw new FcmGeneralException(reasonPhrase);
+        throw new FcmGeneralException(httpStatusCode, reasonPhrase);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class DefaultHttpClient implements IHttpClient {
         try {
             internalPost(requestMessage);
         } catch (IOException e) {
-            throw new FcmCommunicationException("Error making POST Request", e);
+            throw new HttpCommunicationException("Error making POST Request", e);
         }
     }
 
@@ -193,7 +194,7 @@ public class DefaultHttpClient implements IHttpClient {
         try {
             return internalPost(requestMessage, responseType);
         } catch (IOException e) {
-            throw new FcmCommunicationException("Error making POST Request", e);
+            throw new HttpCommunicationException("Error making POST Request", e);
         }
     }
 

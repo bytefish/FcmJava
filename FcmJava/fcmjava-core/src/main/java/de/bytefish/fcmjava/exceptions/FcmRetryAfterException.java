@@ -13,30 +13,8 @@ public class FcmRetryAfterException extends FcmException {
 
     private final Duration retryDelay;
 
-    public FcmRetryAfterException(Duration retryDelay) {
-        this.retryDelay = retryDelay;
-    }
-
-    public FcmRetryAfterException(Duration retryDelay, String message) {
-        super(message);
-
-        this.retryDelay = retryDelay;
-    }
-
-    public FcmRetryAfterException(Duration retryDelay, String message, Throwable cause) {
-        super(message, cause);
-
-        this.retryDelay = retryDelay;
-    }
-
-    public FcmRetryAfterException(Duration retryDelay, Throwable cause) {
-        super(cause);
-
-        this.retryDelay = retryDelay;
-    }
-
-    public FcmRetryAfterException(Duration retryDelay, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public FcmRetryAfterException(int httpStatusCode, String httpReasonPhrase, Duration retryDelay) {
+        super(httpStatusCode, httpReasonPhrase);
 
         this.retryDelay = retryDelay;
     }
