@@ -257,6 +257,41 @@ public class HttpBuilderConfigurationTest {
 }
 ```
 
+## FAQ ##
+
+### How to interpret the FCM Response Messages ###
+
+A common question on the FCM API is how to interpret the response message and handle errors. This is well explained in [Issue #30](https://github.com/bytefish/FcmJava/issues/30).
+
+The user @yakuninv asks how to handle an errorneous ``FcmMessageResultItem`` in the ``FcmMessageResponse``:
+
+> As part of error handling when sending ``NotificationMulticastMessage`` I need to map an erroneous ``FcmMessageResultItem`` to the token that caused an error. A typical use case is to remove not registered tokens from my Database.
+> 
+> Can I rely on the order of ``FcmMessageResultItems`` in the ``FcmMessageResponse``? Does it correspond to the order of ``registrationIds`` provided in the constructor of the ``NotificationMulticastMessage``?
+
+The user @culebras has written a good summary:
+
+> Take a look into this thread, I think it will answer your question (looks like **the order is the same**):
+> 
+> * https://stackoverflow.com/questions/40518125/wich-fcm-registration-id-has-failed-when-targeted-for-multiple-registration-ids
+> 
+> - So for the `FcmMessageResultItems` with `errorCode` equals to `NotRegistered` you will want to remove those tokens for your DB.
+> - For the `FcmMessageResultItems` with `errorCode` equals to `Unavailable` maybe you will want to resend the message for those tokens.
+> - For the `FcmMessageResultItems` with `registration_id` not `null`, you will want to update the tokens in your  DB (I think that the new `registration_id` can be obtained in this library from `FcmMessageResultItem.getCanonicalRegistrationId`).
+> - Etc.
+> 
+> But, regarding to the Canonical IDs, you have to consider this:
+> 
+> * https://stackoverflow.com/questions/45018247/android-google-fcm-canonical-ids-how-to-reproduce-in-non-production-or-tests
+> 
+> Because it looks like that:
+> 
+> > In FCM, it seems the Canonical IDs are no longer used (or at the very least extremely rarely) because of how the Instance ID service works. To put it simply, the service works that there would only be one valid token per App Instance.
+> 
+> So the updating of tokens in your DB for those tokens which are refreshed in FCM cloud would be mostly done in the method `onTokenRefresh()` in your Android client application (in this method is where the device should send the token to your DB the first time the device register itself to the FCM and also when the token is refreshed in FCM).
+> 
+> So, it seems that is not very likely that you are going to receive `FcmMessageResultItem` with `registration_id` not `null`, but anyway, it is good idea to also expect this and update the canonical token of those `FcmMessageResultItem`.
+
 ## Android Client ##
 
 I have decided to clone the messaging quickstart sample of Google, which is available at:
