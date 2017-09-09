@@ -263,13 +263,13 @@ public class HttpBuilderConfigurationTest {
 
 A common question on the FCM API is how to interpret the response message and handle errors. This is well explained in [Issue #30](https://github.com/bytefish/FcmJava/issues/30).
 
-The user @yakuninv asks how to handle an errorneous ``FcmMessageResultItem`` in the ``FcmMessageResponse``:
+The user [@yakuninv](https://github.com/yakuninv) asks how to handle an errorneous ``FcmMessageResultItem`` in the ``FcmMessageResponse``:
 
 > As part of error handling when sending ``NotificationMulticastMessage`` I need to map an erroneous ``FcmMessageResultItem`` to the token that caused an error. A typical use case is to remove not registered tokens from my Database.
 > 
 > Can I rely on the order of ``FcmMessageResultItems`` in the ``FcmMessageResponse``? Does it correspond to the order of ``registrationIds`` provided in the constructor of the ``NotificationMulticastMessage``?
 
-The user @culebras has written a good summary:
+The user [@culebras](https://github.com/culebras) has written a good summary:
 
 > Take a look into this thread, I think it will answer your question (looks like **the order is the same**):
 > 
