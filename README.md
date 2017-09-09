@@ -261,7 +261,7 @@ public class HttpBuilderConfigurationTest {
 
 ### How to interpret the FCM Response Messages ###
 
-A common question on the FCM API is how to interpret the response message and handle errors. This is well explained in [Issue #30](https://github.com/bytefish/FcmJava/issues/30).
+[Issue #30](https://github.com/bytefish/FcmJava/issues/30) explains how to interpret the FCM response message and handle errors.
 
 The user [@yakuninv](https://github.com/yakuninv) asks how to handle an errorneous ``FcmMessageResultItem`` in the ``FcmMessageResponse``:
 
