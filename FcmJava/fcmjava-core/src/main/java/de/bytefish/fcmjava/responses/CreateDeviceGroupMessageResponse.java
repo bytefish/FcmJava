@@ -13,7 +13,7 @@ public class CreateDeviceGroupMessageResponse {
     private final String notificationKey;
 
     @JsonCreator
-    public CreateDeviceGroupMessageResponse(@JsonProperty String notificationKey) {
+    public CreateDeviceGroupMessageResponse(@JsonProperty("notification_key") String notificationKey) {
         this.notificationKey = notificationKey;
     }
 

@@ -22,7 +22,7 @@ public class AddDeviceGroupMessageTest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void AddDeviceGroupSerializationTest() throws Exception {
+    public void addDeviceGroupSerializationTest() throws Exception {
 
         // General Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
