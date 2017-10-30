@@ -26,6 +26,7 @@ public class NotificationPayloadBuilder {
     private List<String> bodyLocKeyArgs;
     private String titleLocKey;
     private List<String> titleLocKeyArgs;
+    private String androidChannelId;
 
     public NotificationPayloadBuilder setTitle(String title) {
         this.title = title;
@@ -87,6 +88,11 @@ public class NotificationPayloadBuilder {
         return this;
     }
 
+    public NotificationPayloadBuilder setAndroidChannelId(String androidChannelId) {
+        this.androidChannelId = androidChannelId;
+        return this;
+    }
+
     public NotificationPayload build() {
         return new NotificationPayload(
                 title,
@@ -100,7 +106,8 @@ public class NotificationPayloadBuilder {
                 bodyLocKey,
                 bodyLocKeyArgs,
                 titleLocKey,
-                titleLocKeyArgs);
+                titleLocKeyArgs,
+                androidChannelId);
     }
 
 }
