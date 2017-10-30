@@ -23,8 +23,9 @@ public class NotificationPayload {
     private final List<String> bodyLocKeyArgs;
     private final String titleLocKey;
     private final List<String> titleLocKeyArgs;
+    private final String androidChannelId;
 
-    public NotificationPayload(String title, String body, String icon, String sound, String badge, String tag, String color, String clickAction, String bodyLocKey, List<String> bodyLocKeyArgs, String titleLocKey, List<String> titleLocKeyArgs) {
+    public NotificationPayload(String title, String body, String icon, String sound, String badge, String tag, String color, String clickAction, String bodyLocKey, List<String> bodyLocKeyArgs, String titleLocKey, List<String> titleLocKeyArgs, String androidChannelId) {
         this.title = title;
         this.body = body;
         this.icon = icon;
@@ -37,6 +38,7 @@ public class NotificationPayload {
         this.bodyLocKeyArgs = bodyLocKeyArgs;
         this.titleLocKey = titleLocKey;
         this.titleLocKeyArgs = titleLocKeyArgs;
+        this.androidChannelId = androidChannelId;
     }
 
     @JsonProperty("title")
@@ -97,6 +99,11 @@ public class NotificationPayload {
     @JsonProperty("title_loc_args")
     public List<String> getTitleLocKeyArgs() {
         return titleLocKeyArgs;
+    }
+
+    @JsonProperty("android_channel_id")
+    public String getAndroidChannelId() {
+        return androidChannelId;
     }
 
     public static NotificationPayloadBuilder builder() {
