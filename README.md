@@ -1,15 +1,5 @@
 # FcmJava #
 
-## Update ##
-
-The Firebase Admin SDK now supports Firebase Cloud Messaging with Java: 
-
-* https://firebase.google.com/docs/admin/setup
-
-That makes FcmJava obsolete, and FcmJava won't be updated anymore. 
-
-You should use the official Firebase Admin SDK. 
-
 ## Table of Contents ##
 
 * [Description](#description)
