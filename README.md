@@ -1,5 +1,9 @@
 # FcmJava #
 
+## On the Firebase Admin SDK for Java ##
+
+This library was written at a time, when the official Firebase Admin SDK for Java did **not** support the Cloud Messaging API. The most recent release of the Firebase Admin SDK **now also contains the Cloud Messaging**, so the official SDK can be used instead of this library. You can find the official Firebase Admin SDK for Java at: https://firebase.google.com/docs/admin/setup.
+
 ## Table of Contents ##
 
 * [Description](#description)
